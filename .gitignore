@@ -1,0 +1,8 @@
+__pycache__/
+.venv/
+web/.env
+.vercel/
+# bronze es reproducible con el pipeline y pesa ~80 MB (GTFS incluido)
+datalake/bronze/
+datalake/silver/*.sqlite-wal
+datalake/silver/*.sqlite-shm

@@ -1,0 +1,7 @@
+{
+  "name": "cerebro-budapest",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Gemelo territorial de Budapest: sitio estático + funciones /api con compuerta y lago de datos.",
+  "engines": { "node": ">=18" }
+}

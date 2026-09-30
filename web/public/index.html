@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cerebro Budapest</title>
+  <meta name="description" content="Gemelo territorial privado de Budapest: 23 distritos, datos abiertos federados con fuente y fecha.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='9' fill='%23e8a33d'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="estilos.css?v=1">
+</head>
+<body>
+  <!-- Compuerta: la clave se valida en el servidor (/api/entrar) -->
+  <div id="gate" class="gate" hidden>
+    <form id="gateForm" class="gate-card" autocomplete="off">
+      <div class="marca"><span class="punto"></span>CEREBRO BUDAPEST</div>
+      <p>Gemelo territorial privado · 23 kerületek · datos abiertos federados</p>
+      <label for="clave" class="mono">Clave de acceso</label>
+      <input id="clave" type="password" required autocomplete="current-password">
+      <button type="submit">Entrar</button>
+      <p id="gateMsg" class="gate-msg" role="status"></p>
+    </form>
+  </div>
+
+  <div id="app" class="app" hidden>
+    <nav id="menu" class="menu" aria-label="Secciones">
+      <div class="marca"><span class="punto"></span>CEREBRO<b>BUDAPEST</b></div>
+      <a href="#panorama" data-sec="panorama">Panorama</a>
+      <a href="#gemelo" data-sec="gemelo">Gemelo territorial 3D</a>
+      <a href="#gente" data-sec="gente">Gente</a>
+      <a href="#economia" data-sec="economia">Economía y vivienda</a>
+      <a href="#turismo" data-sec="turismo">Turismo</a>
+      <a href="#movilidad" data-sec="movilidad">Movilidad</a>
+      <a href="#ambiente" data-sec="ambiente">Ambiente y clima</a>
+      <a href="#correlaciones" data-sec="correlaciones">Correlaciones</a>
+      <a href="#atlas" data-sec="atlas">Atlas de los 23 distritos</a>
+      <a href="#fuentes" data-sec="fuentes">Fuentes y método</a>
+      <div class="menu-pie">
+        <div id="estadoDatos" class="estado mono">lago: cargando…</div>
+        <button id="btnBuscar" class="ghost" type="button">Buscar <kbd>Ctrl K</kbd></button>
+        <button id="btnSalir" class="ghost" type="button">Cerrar sesión</button>
+      </div>
+    </nav>
+
+    <main id="main" class="main">
+      <header class="barra">
+        <button id="btnMenu" class="ghost menu-movil" type="button" aria-label="Abrir menú">☰</button>
+        <div id="migas" class="migas">Panorama</div>
+        <div class="barra-der mono"><span id="reloj"></span><span id="clima" class="clima"></span></div>
+      </header>
+
+      <section id="panorama" class="sec hero">
+        <p class="eyebrow mono">Budapest · 23 distritos · 525 km² · Buda, Pest y Csepel</p>
+        <h1>Entiende un distrito.<br><span>Decide con evidencia.</span></h1>
+        <p id="panoramaLead" class="lead"></p>
+        <section id="diagnostico" class="diagnostico">
+          <header>
+            <p class="eyebrow mono">Diagnóstico territorial · 23 distritos</p>
+            <h2>¿Qué ocurre en este distrito?</h2>
+            <p class="sub">Compara movilidad, servicios, verde, vivienda y aire. Cambia la prioridad y observa si la conclusión se sostiene.</p>
+          </header>
+          <div class="diag-controles">
+            <label>Distrito principal<select id="diagA"></select></label>
+            <button id="diagSwap" class="ghost" type="button" title="Intercambiar">⇄</button>
+            <label>Comparar con<select id="diagB"></select></label>
+          </div>
+          <div class="chips" id="diagPerfiles" role="group" aria-label="Prioridad"></div>
+          <div id="diagResultado" class="diag-resultado"></div>
+        </section>
+        <div id="panoramaTiles" class="tiles"></div>
+      </section>
+
+      <section id="gemelo" class="sec sec-mapa">
+        <h1>Gemelo territorial 3D</h1>
+        <p class="lead">Explora Budapest por preguntas —movilidad, densidad, servicios, verde o aire— y haz clic en cualquier punto para medir su entorno en 500 m. El mapa combina los límites de los 23 distritos, las paradas y líneas del GTFS de BKK, MOL Bubi, sensores ciudadanos y oficiales, equipamientos OSM, edificios 3D y capas Copernicus.</p>
+        <div id="mapaWrap" class="mapa-wrap">
+          <div id="mapa" class="mapa"></div>
+          <nav id="lentes" class="lentes" aria-label="Lentes del mapa"></nav>
+          <aside id="mapaPanel" class="mapa-panel">
+            <h3>Capas</h3><div id="capas" class="capas"></div>
+            <h3>Mapa base</h3><div id="bases" class="bases"></div>
+            <h3>Buscar lugar</h3><input id="mapaBuscar" type="search" placeholder="Parada, museo, distrito…"><div id="mapaResultados" class="mapa-resultados"></div>
+          </aside>
+          <div id="leyenda" class="leyenda"></div>
+          <div id="ficha" class="ficha" hidden></div>
+          <div id="hud" class="hud mono"></div>
+        </div>
+        <p class="notas" id="gemeloNotas">Las salidas de transporte corresponden a un miércoles de referencia del GTFS vigente. Los sensores ciudadanos son una instantánea del momento de ingesta, no una media oficial.</p>
+      </section>
+
+      <section id="gente" class="sec"><h1>Gente</h1><p id="genteLead" class="lead"></p><div id="genteTiles" class="tiles"></div><div id="genteGraficos" class="grid2"></div></section>
+      <section id="economia" class="sec"><h1>Economía y vivienda</h1><p id="economiaLead" class="lead"></p><div id="economiaTiles" class="tiles"></div><div id="economiaGraficos" class="grid2"></div></section>
+      <section id="turismo" class="sec"><h1>Turismo</h1><p id="turismoLead" class="lead"></p><div id="turismoTiles" class="tiles"></div><div id="turismoGraficos" class="grid2"></div></section>
+      <section id="movilidad" class="sec"><h1>Movilidad</h1><p id="movilidadLead" class="lead"></p><div id="movilidadTiles" class="tiles"></div><div id="movilidadGraficos" class="grid2"></div></section>
+      <section id="ambiente" class="sec"><h1>Ambiente y clima</h1><p id="ambienteLead" class="lead"></p><div id="ambienteTiles" class="tiles"></div><div id="ambienteGraficos" class="grid2"></div></section>
+
+      <section id="correlaciones" class="sec">
+        <p class="eyebrow mono">Lectura cruzada · 23 distritos</p>
+        <h1>Correlaciones</h1>
+        <p id="correlacionesLead" class="lead"></p>
+        <div class="corr-controles">
+          <label>Eje X<select id="corrX"></select></label>
+          <label>Eje Y<select id="corrY"></select></label>
+        </div>
+        <div class="grid2 corr">
+          <div class="card"><div id="corrGrafico"></div></div>
+          <div class="card"><div id="corrLectura"></div><h3>Pares más asociados</h3><div id="corrPares" class="pares"></div></div>
+        </div>
+      </section>
+
+      <section id="atlas" class="sec">
+        <h1>Atlas de los 23 distritos</h1>
+        <p id="atlasLead" class="lead"></p>
+        <div class="atlas">
+          <div class="card"><h3>Pesos del índice</h3><div id="atlasPesos" class="pesos"></div><div id="atlasMetrica" class="chips"></div></div>
+          <div class="card"><div id="atlasMapa" class="atlas-mapa"></div></div>
+        </div>
+        <div class="card"><div id="atlasTabla"></div></div>
+      </section>
+
+      <section id="fuentes" class="sec">
+        <h1>Fuentes y método</h1>
+        <p id="fuentesLead" class="lead"></p>
+        <div id="fuentesTiles" class="tiles"></div>
+        <div id="fuentesCont"></div>
+      </section>
+
+      <footer class="pie mono">Cerebro Budapest · datos abiertos federados, cada cifra con fuente y fecha · uso privado · <span id="pieProbado"></span></footer>
+    </main>
+  </div>
+
+  <div id="buscador" class="buscador" hidden role="dialog" aria-label="Buscar">
+    <input id="buscadorInput" type="search" placeholder="Busca una sección, cifra, parada o lugar…" role="combobox" aria-controls="buscadorLista" aria-expanded="true">
+    <div id="buscadorLista" class="buscador-lista" role="listbox"></div>
+  </div>
+  <div id="tip" class="tip" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+  <script src="js/graficos.js?v=1"></script>
+  <script src="js/secciones.js?v=1"></script>
+  <script src="js/diagnostico.js?v=1"></script>
+  <script src="js/atlas.js?v=1"></script>
+  <script src="js/correlaciones.js?v=1"></script>
+  <script src="js/mapa.js?v=1"></script>
+  <script src="js/app.js?v=1"></script>
+</body>
+</html>
