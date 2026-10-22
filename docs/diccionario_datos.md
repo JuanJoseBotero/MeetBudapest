@@ -1,6 +1,6 @@
 # Diccionario de datos · Cerebro Budapest
 
-Generado automáticamente el 2026-09-29 por `pipelines/diccionario.py` a partir del catálogo real del lago (no se edita a mano: se regenera en cada ejecución del pipeline).
+Generado automáticamente el 2026-10-22 por `pipelines/diccionario.py` a partir del catálogo real del lago (no se edita a mano: se regenera en cada ejecución del pipeline).
 
 ## 1. Convenciones
 
@@ -44,62 +44,62 @@ Cada descarga se escribe tal cual llega y se registra en `datalake/catalogo/lina
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| distritos.json | 702.608 | 2026-09-29T22:19 | https://overpass-api.de/api/interpreter :: [out:json][timeout:240];area["name"="Budapest"]["boundary"="administrative"]->.bp;rel(area.bp)["b |
+| distritos.json | 339 | 2026-10-22T22:20 | https://overpass.kumi.systems/api/interpreter :: [out:json][timeout:240];area["name"="Budapest"]["boundary"="administrative"]->.bp;rel(area. |
 | edificios_conteo.json | 7.208 | 2026-09-29T22:24 | https://overpass-api.de/api/interpreter :: [out:json][timeout:900];area(id:3600215618)->.a;way["building"](area.a)->.w;rel["building"](area. |
-| poi.json | 7.115.372 | 2026-09-29T22:20 | https://overpass-api.de/api/interpreter :: [out:json][timeout:600];area["name"="Budapest"]["boundary"="administrative"]->.bp;(nwr["amenity"~ |
+| poi.json | 6.964.759 | 2026-10-20T21:12 | https://overpass.kumi.systems/api/interpreter :: [out:json][timeout:600];area["name"="Budapest"]["boundary"="administrative"]->.bp;(nwr["ame |
 
 ### `geofabrik`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| hungary.poly | 11.547 | 2026-09-29T22:24 | https://download.geofabrik.de/europe/hungary.poly |
-| pbf_head.txt | 70 | 2026-09-29T22:24 | https://download.geofabrik.de/europe/hungary-latest.osm.pbf |
-| state.txt | 113 | 2026-09-29T22:24 | https://download.geofabrik.de/europe/hungary-updates/state.txt |
+| hungary.poly | 11.547 | 2026-10-22T22:45 | https://download.geofabrik.de/europe/hungary.poly |
+| pbf_head.txt | 70 | 2026-10-22T22:45 | https://download.geofabrik.de/europe/hungary-latest.osm.pbf |
+| state.txt | 113 | 2026-10-22T22:45 | https://download.geofabrik.de/europe/hungary-updates/state.txt |
 
 ### `copernicus`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| imperviousness_2018/distrito_01.json | 675 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_02.json | 742 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_03.json | 775 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_04.json | 777 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_05.json | 636 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_06.json | 679 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_07.json | 656 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_08.json | 710 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_09.json | 775 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_10.json | 777 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_11.json | 777 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_12.json | 735 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_13.json | 769 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_14.json | 774 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_15.json | 776 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_16.json | 764 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_17.json | 763 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_18.json | 775 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_19.json | 753 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_20.json | 751 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_21.json | 776 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_22.json | 774 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| imperviousness_2018/distrito_23.json | 773 | 2026-09-30T03:14 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
-| tree_cover_2018/distrito_01.json | 545 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_02.json | 706 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_03.json | 704 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_04.json | 687 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_05.json | 450 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_06.json | 470 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_07.json | 461 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_08.json | 591 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_09.json | 605 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_10.json | 700 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_11.json | 686 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_12.json | 702 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_13.json | 601 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_14.json | 632 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_15.json | 687 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_16.json | 699 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
-| tree_cover_2018/distrito_17.json | 716 | 2026-09-30T03:15 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| imperviousness_2018/distrito_01.json | 675 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_02.json | 742 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_03.json | 775 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_04.json | 777 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_05.json | 636 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_06.json | 679 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_07.json | 656 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_08.json | 710 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_09.json | 775 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_10.json | 777 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_11.json | 777 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_12.json | 735 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_13.json | 769 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_14.json | 774 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_15.json | 776 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_16.json | 764 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_17.json | 763 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_18.json | 775 | 2026-10-22T22:45 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_19.json | 753 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_20.json | 751 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_21.json | 776 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_22.json | 774 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| imperviousness_2018/distrito_23.json | 773 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_ImperviousnessDensity_2018/ImageServer/computeStatisticsHistogra |
+| tree_cover_2018/distrito_01.json | 545 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_02.json | 706 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_03.json | 704 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_04.json | 687 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_05.json | 450 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_06.json | 470 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_07.json | 461 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_08.json | 591 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_09.json | 605 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_10.json | 700 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_11.json | 686 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_12.json | 702 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_13.json | 601 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_14.json | 632 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_15.json | 687 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_16.json | 699 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
+| tree_cover_2018/distrito_17.json | 716 | 2026-10-22T22:46 | https://image.discomap.eea.europa.eu/arcgis/rest/services/GioLandPublic/HRL_TreeCoverDensity_2018/ImageServer/computeStatisticsHistograms |
 
 … y 6 archivos más del mismo patrón.
 
@@ -107,132 +107,137 @@ Cada descarga se escribe tal cual llega y se registra en `datalake/catalogo/lina
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| budapest_gtfs.zip | 59.415.802 | 2026-09-29T22:27 | https://files.mobilitydatabase.org/mdb-990/latest.zip |
-| origen.txt | 10 | 2026-09-29T22:27 | https://files.mobilitydatabase.org/mdb-990/latest.zip |
+| budapest_gtfs.zip | 65.391.202 | 2026-10-22T22:46 | https://go.bkk.hu/api/static/v1/public-gtfs/budapest_gtfs.zip |
+| origen.txt | 3 | 2026-10-22T22:46 | https://go.bkk.hu/api/static/v1/public-gtfs/budapest_gtfs.zip |
 
 ### `mobilitydb`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| feeds_v2.csv | 2.644.803 | 2026-09-29T22:24 | https://files.mobilitydatabase.org/feeds_v2.csv |
+| feeds_v2.csv | 2.729.383 | 2026-10-22T22:46 | https://files.mobilitydatabase.org/feeds_v2.csv |
 
 ### `bubi`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
 | nextbike_bh_0313.json | 1.016 | 2026-09-30T03:13 | https://maps2.nextbike.net/maps/nextbike-live.json?domains=bh |
+| nextbike_bh_2128.json | 1.016 | 2026-10-20T21:28 | https://maps2.nextbike.net/maps/nextbike-live.json?domains=bh |
 | nextbike_bh_2227.json | 1.016 | 2026-09-29T22:27 | https://maps2.nextbike.net/maps/nextbike-live.json?domains=bh |
 | nextbike_bh_2235.json | 1.016 | 2026-09-29T22:35 | https://maps2.nextbike.net/maps/nextbike-live.json?domains=bh |
+| nextbike_bh_2247.json | 1.016 | 2026-10-22T22:47 | https://maps2.nextbike.net/maps/nextbike-live.json?domains=bh |
 
 ### `ksh`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| helysegnevtar_2020.xlsx | 1.371.696 | 2026-09-29T22:18 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2020.xlsx |
-| helysegnevtar_2021.xlsx | 1.372.947 | 2026-09-29T22:18 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2021.xlsx |
-| helysegnevtar_2022.xlsx | 1.372.185 | 2026-09-29T22:18 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2022.xlsx |
-| helysegnevtar_2023.xlsx | 1.368.113 | 2026-09-29T22:17 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2023.xlsx |
-| helysegnevtar_2024.xlsx | 1.369.720 | 2026-09-29T22:16 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2024.xlsx |
-| helysegnevtar_2025.xlsx | 1.370.790 | 2026-09-29T22:16 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2025.xlsx |
-| hvd_edad_mediana.csv | 109.507 | 2026-09-29T22:16 | https://data.ksh.hu/datasets/f44d314b-bc27-40a7-b34e-af01b3c4ab05/data/093d149c-9951-4dd0-99ae-4a5e858a7b45.csv |
-| hvd_esperanza_vida.csv | 1.266.015 | 2026-09-29T22:16 | https://data.ksh.hu/datasets/fc86b7eb-f813-424f-baea-a32d65e1fdec/data/169201f0-24a4-434a-8900-3c035cd4430f.csv |
-| hvd_mortalidad.csv | 25.294 | 2026-09-29T22:16 | https://data.ksh.hu/datasets/fc86b7eb-f813-424f-baea-a32d65e1fdec/data/d442dc4c-20fb-4ca8-bfde-9171e04a683d.csv |
-| hvd_mortalidad_infantil.csv | 3.507 | 2026-09-29T22:16 | https://data.ksh.hu/datasets/fc86b7eb-f813-424f-baea-a32d65e1fdec/data/99ac9e47-dc1b-44d8-8e69-cd88018c0244.csv |
-| hvd_natalidad.csv | 25.294 | 2026-09-29T22:16 | https://data.ksh.hu/datasets/4e8d4137-0962-4dfe-9d06-ca9d38ec6301/data/d96c6d1d-ee4b-483d-bfab-4b0baaae5e55.csv |
-| hvd_poblacion_edad_sexo.csv | 1.053.980 | 2026-09-29T22:16 | https://data.ksh.hu/datasets/f44d314b-bc27-40a7-b34e-af01b3c4ab05/data/eb3e481e-6b5a-45d1-8076-18c4ece155c2.csv |
+| helysegnevtar_2020.xlsx | 1.371.696 | 2026-10-22T22:13 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2020.xlsx |
+| helysegnevtar_2021.xlsx | 1.372.947 | 2026-10-22T22:13 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2021.xlsx |
+| helysegnevtar_2022.xlsx | 1.372.185 | 2026-10-22T22:13 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2022.xlsx |
+| helysegnevtar_2023.xlsx | 1.368.113 | 2026-10-22T22:13 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2023.xlsx |
+| helysegnevtar_2024.xlsx | 1.369.720 | 2026-10-22T22:13 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2024.xlsx |
+| helysegnevtar_2025.xlsx | 1.370.790 | 2026-10-22T22:13 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2025.xlsx |
+| helysegnevtar_2026.xlsx | 1.377.826 | 2026-10-22T22:13 | https://www.ksh.hu/docs/helysegnevtar/hnt_letoltes_2026.xlsx |
+| hvd_edad_mediana.csv | 109.507 | 2026-10-22T22:12 | https://data.ksh.hu/datasets/f44d314b-bc27-40a7-b34e-af01b3c4ab05/data/093d149c-9951-4dd0-99ae-4a5e858a7b45.csv |
+| hvd_esperanza_vida.csv | 1.266.015 | 2026-10-22T22:12 | https://data.ksh.hu/datasets/fc86b7eb-f813-424f-baea-a32d65e1fdec/data/169201f0-24a4-434a-8900-3c035cd4430f.csv |
+| hvd_mortalidad.csv | 25.294 | 2026-10-22T22:12 | https://data.ksh.hu/datasets/fc86b7eb-f813-424f-baea-a32d65e1fdec/data/d442dc4c-20fb-4ca8-bfde-9171e04a683d.csv |
+| hvd_mortalidad_infantil.csv | 3.507 | 2026-10-22T22:13 | https://data.ksh.hu/datasets/fc86b7eb-f813-424f-baea-a32d65e1fdec/data/99ac9e47-dc1b-44d8-8e69-cd88018c0244.csv |
+| hvd_natalidad.csv | 25.294 | 2026-10-22T22:12 | https://data.ksh.hu/datasets/4e8d4137-0962-4dfe-9d06-ca9d38ec6301/data/d96c6d1d-ee4b-483d-bfab-4b0baaae5e55.csv |
+| hvd_poblacion_edad_sexo.csv | 1.053.980 | 2026-10-22T22:12 | https://data.ksh.hu/datasets/f44d314b-bc27-40a7-b34e-af01b3c4ab05/data/eb3e481e-6b5a-45d1-8076-18c4ece155c2.csv |
 
 ### `eurostat`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| densidad.json | 3.636 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_r_d3dens?format=JSON&lang=en&geo=HU110 |
-| desempleo.json | 4.265 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lfst_r_lfu3rt?format=JSON&lang=en&geo=HU11&sex=T&age=Y20-64&isced11=TOTA |
-| educacion_terciaria.json | 3.692 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/edat_lfse_04?format=JSON&lang=en&geo=HU11&sex=T&age=Y25-64&isced11=ED5-8 |
-| empleo.json | 4.069 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lfst_r_lfe2emprt?format=JSON&lang=en&geo=HU11&sex=T&age=Y20-64 |
-| empresas.json | 3.542 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/bd_hgnace2_r3?format=JSON&lang=en&geo=HU110&nace_r2=B-S_X_K642&indic_sb= |
-| esperanza_vida_ue.json | 3.766 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_r_mlifexp?format=JSON&lang=en&geo=HU11&sex=T&age=Y_LT1 |
-| gasto_id_pib.json | 4.550 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/rd_e_gerdreg?format=JSON&lang=en&geo=HU11&sectperf=TOTAL&unit=PC_GDP |
-| ingreso_disponible.json | 4.815 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tgs00026?format=JSON&lang=en&geo=HU11 |
-| llegadas.json | 4.264 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tour_occ_arn2?format=JSON&lang=en&geo=HU11&unit=NR&nace_r2=I551-I553&c_r |
-| pernoctaciones.json | 4.284 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tour_occ_nin2?format=JSON&lang=en&geo=HU11&unit=NR&nace_r2=I551-I553&c_r |
-| pib_hab_eur.json | 3.398 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10r_3gdp?format=JSON&lang=en&geo=HU110&unit=EUR_HAB |
-| pib_hab_pps_ue.json | 3.061 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10r_2gdp?format=JSON&lang=en&geo=HU11&unit=PPS_EU27_2020_HAB_EU27_2 |
-| pib_meur.json | 3.425 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10r_3gdp?format=JSON&lang=en&geo=HU110&unit=MIO_EUR |
-| precio_vivienda_hu.json | 6.740 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hpi_q?format=JSON&lang=en&geo=HU&purchase=TOTAL&unit=I15_Q |
-| riesgo_pobreza_exclusion.json | 3.387 | 2026-09-29T22:27 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_peps11n?format=JSON&lang=en&geo=HU11&unit=PC |
-| ua_ambiente.json | 7.486 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_cenv?format=JSON&lang=en&cities=HU001C |
-| ua_poblacion.json | 19.908 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_cpop1?format=JSON&lang=en&cities=HU001C |
-| ua_trabajo.json | 8.438 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_clma?format=JSON&lang=en&cities=HU001C |
-| ua_transporte.json | 6.536 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_ctran?format=JSON&lang=en&cities=HU001C |
-| ua_turismo.json | 6.422 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_ctour?format=JSON&lang=en&cities=HU001C |
-| vehiculos.json | 4.849 | 2026-09-29T22:28 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tran_r_vehst?format=JSON&lang=en&geo=HU11&unit=NR |
+| densidad.json | 3.636 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_r_d3dens?format=JSON&lang=en&geo=HU110 |
+| desempleo.json | 4.265 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lfst_r_lfu3rt?format=JSON&lang=en&geo=HU11&sex=T&age=Y20-64&isced11=TOTA |
+| educacion_terciaria.json | 3.692 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/edat_lfse_04?format=JSON&lang=en&geo=HU11&sex=T&age=Y25-64&isced11=ED5-8 |
+| empleo.json | 4.069 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/lfst_r_lfe2emprt?format=JSON&lang=en&geo=HU11&sex=T&age=Y20-64 |
+| empresas.json | 3.542 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/bd_hgnace2_r3?format=JSON&lang=en&geo=HU110&nace_r2=B-S_X_K642&indic_sb= |
+| esperanza_vida_ue.json | 3.766 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/demo_r_mlifexp?format=JSON&lang=en&geo=HU11&sex=T&age=Y_LT1 |
+| gasto_id_pib.json | 4.550 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/rd_e_gerdreg?format=JSON&lang=en&geo=HU11&sectperf=TOTAL&unit=PC_GDP |
+| ingreso_disponible.json | 4.815 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tgs00026?format=JSON&lang=en&geo=HU11 |
+| llegadas.json | 4.265 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tour_occ_arn2?format=JSON&lang=en&geo=HU11&unit=NR&nace_r2=I551-I553&c_r |
+| pernoctaciones.json | 4.284 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tour_occ_nin2?format=JSON&lang=en&geo=HU11&unit=NR&nace_r2=I551-I553&c_r |
+| pib_hab_eur.json | 3.398 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10r_3gdp?format=JSON&lang=en&geo=HU110&unit=EUR_HAB |
+| pib_hab_pps_ue.json | 3.061 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10r_2gdp?format=JSON&lang=en&geo=HU11&unit=PPS_EU27_2020_HAB_EU27_2 |
+| pib_meur.json | 3.425 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/nama_10r_3gdp?format=JSON&lang=en&geo=HU110&unit=MIO_EUR |
+| precio_vivienda_hu.json | 6.794 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/prc_hpi_q?format=JSON&lang=en&geo=HU&purchase=TOTAL&unit=I15_Q |
+| riesgo_pobreza_exclusion.json | 3.387 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/ilc_peps11n?format=JSON&lang=en&geo=HU11&unit=PC |
+| ua_ambiente.json | 7.513 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_cenv?format=JSON&lang=en&cities=HU001C |
+| ua_poblacion.json | 19.908 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_cpop1?format=JSON&lang=en&cities=HU001C |
+| ua_trabajo.json | 8.438 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_clma?format=JSON&lang=en&cities=HU001C |
+| ua_transporte.json | 6.536 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_ctran?format=JSON&lang=en&cities=HU001C |
+| ua_turismo.json | 6.422 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/urb_ctour?format=JSON&lang=en&cities=HU001C |
+| vehiculos.json | 4.849 | 2026-10-22T22:47 | https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/tran_r_vehst?format=JSON&lang=en&geo=HU11&unit=NR |
 
 ### `sensor_community`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
+| filtro_area_2128.json | 311.013 | 2026-10-20T21:28 | https://data.sensor.community/airrohr/v1/filter/area=47.4979,19.0402,20 |
 | filtro_area_2228.json | 266.902 | 2026-09-29T22:28 | https://data.sensor.community/airrohr/v1/filter/area=47.4979,19.0402,20 |
+| filtro_area_2247.json | 305.887 | 2026-10-22T22:47 | https://data.sensor.community/airrohr/v1/filter/area=47.4979,19.0402,20 |
 
 ### `opensensemap`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| boxes.json | 216.343 | 2026-09-29T22:35 | https://api.opensensemap.org/boxes |
-| sensores/5e22cd727993c4001bf78681.json | 993 | 2026-09-29T22:35 | https://api.opensensemap.org/boxes/5e22cd727993c4001bf78681/sensors |
-| sensores/5e56763a37f639001bd14bb1.json | 1.170 | 2026-09-29T22:36 | https://api.opensensemap.org/boxes/5e56763a37f639001bd14bb1/sensors |
-| sensores/602e845c37bfd7001b97bc76.json | 992 | 2026-09-29T22:40 | https://api.opensensemap.org/boxes/602e845c37bfd7001b97bc76/sensors |
-| sensores/6040f4368ad04a001bdbe3c5.json | 992 | 2026-09-29T22:40 | https://api.opensensemap.org/boxes/6040f4368ad04a001bdbe3c5/sensors |
-| sensores/6051eafb67c38b001becf5c1.json | 993 | 2026-09-29T22:41 | https://api.opensensemap.org/boxes/6051eafb67c38b001becf5c1/sensors |
-| sensores/609ccb6225b716001c46f310.json | 992 | 2026-09-29T22:41 | https://api.opensensemap.org/boxes/609ccb6225b716001c46f310/sensors |
-| sensores/609ee46125b716001c53b1f9.json | 992 | 2026-09-29T22:41 | https://api.opensensemap.org/boxes/609ee46125b716001c53b1f9/sensors |
-| sensores/60c4dad1e650df001cc49789.json | 991 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/60c4dad1e650df001cc49789/sensors |
-| sensores/60d596f18855dd001cc63c61.json | 994 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/60d596f18855dd001cc63c61/sensors |
-| sensores/60d71dd18855dd001c7c534e.json | 992 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/60d71dd18855dd001c7c534e/sensors |
+| boxes.json | 217.027 | 2026-10-22T22:47 | https://api.opensensemap.org/boxes |
+| sensores/5cbb4a4a815d52001ab980f6.json | 415 | 2026-10-22T22:47 | https://api.opensensemap.org/boxes/5cbb4a4a815d52001ab980f6/sensors |
+| sensores/5e22cd727993c4001bf78681.json | 994 | 2026-10-22T22:47 | https://api.opensensemap.org/boxes/5e22cd727993c4001bf78681/sensors |
+| sensores/5e56763a37f639001bd14bb1.json | 1.169 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/5e56763a37f639001bd14bb1/sensors |
+| sensores/5f15a1e8e8f87e001c7e0eac.json | 859 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/5f15a1e8e8f87e001c7e0eac/sensors |
+| sensores/5fee0624576ab7001ccf57c2.json | 991 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/5fee0624576ab7001ccf57c2/sensors |
+| sensores/601ceca9e443a0001bcc9379.json | 992 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/601ceca9e443a0001bcc9379/sensors |
+| sensores/602e845c37bfd7001b97bc76.json | 993 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/602e845c37bfd7001b97bc76/sensors |
+| sensores/6040f4368ad04a001bdbe3c5.json | 993 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/6040f4368ad04a001bdbe3c5/sensors |
+| sensores/6051eafb67c38b001becf5c1.json | 992 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/6051eafb67c38b001becf5c1/sensors |
+| sensores/609ccb6225b716001c46f310.json | 993 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/609ccb6225b716001c46f310/sensors |
+| sensores/609ee46125b716001c53b1f9.json | 993 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/609ee46125b716001c53b1f9/sensors |
+| sensores/60c4dad1e650df001cc49789.json | 991 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/60c4dad1e650df001cc49789/sensors |
+| sensores/60d596f18855dd001cc63c61.json | 994 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/60d596f18855dd001cc63c61/sensors |
+| sensores/60d71dd18855dd001c7c534e.json | 991 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/60d71dd18855dd001c7c534e/sensors |
 | sensores/61126d145f5cac001bb8f7b0.json | 994 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/61126d145f5cac001bb8f7b0/sensors |
-| sensores/61a47f514a7833001b5191c3.json | 796 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/61a47f514a7833001b5191c3/sensors |
-| sensores/61c1093fe2a8da001b202851.json | 991 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/61c1093fe2a8da001b202851/sensors |
-| sensores/61cf17231b17b1001b17e00a.json | 1.020 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/61cf17231b17b1001b17e00a/sensors |
-| sensores/631afd6d46ccc3001c8ef333.json | 648 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/631afd6d46ccc3001c8ef333/sensors |
-| sensores/632accb7b6658f001be047aa.json | 997 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/632accb7b6658f001be047aa/sensors |
-| sensores/633c4150ca8ac8001b7abbf9.json | 992 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/633c4150ca8ac8001b7abbf9/sensors |
-| sensores/63550a8b817d12001b4f5cfd.json | 992 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/63550a8b817d12001b4f5cfd/sensors |
+| sensores/61a47f514a7833001b5191c3.json | 797 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/61a47f514a7833001b5191c3/sensors |
+| sensores/61c1093fe2a8da001b202851.json | 992 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/61c1093fe2a8da001b202851/sensors |
+| sensores/61cf17231b17b1001b17e00a.json | 1.032 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/61cf17231b17b1001b17e00a/sensors |
+| sensores/631afd6d46ccc3001c8ef333.json | 648 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/631afd6d46ccc3001c8ef333/sensors |
+| sensores/632accb7b6658f001be047aa.json | 997 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/632accb7b6658f001be047aa/sensors |
+| sensores/633c4150ca8ac8001b7abbf9.json | 993 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/633c4150ca8ac8001b7abbf9/sensors |
+| sensores/63550a8b817d12001b4f5cfd.json | 991 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/63550a8b817d12001b4f5cfd/sensors |
 | sensores/6377557a9b1ef5001b1e6af7.json | 763 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/6377557a9b1ef5001b1e6af7/sensors |
-| sensores/6391c79670c7ae001b0e1985.json | 992 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/6391c79670c7ae001b0e1985/sensors |
-| sensores/63e39c28880265000751e48c.json | 649 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/63e39c28880265000751e48c/sensors |
-| sensores/6411c53df954a70008b20a76.json | 854 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/6411c53df954a70008b20a76/sensors |
-| sensores/641dbb33bbc9860008032fdc.json | 992 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/641dbb33bbc9860008032fdc/sensors |
-| sensores/647650c8ccc90f000712f623.json | 1.898 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/647650c8ccc90f000712f623/sensors |
-| sensores/65bdde7ae9153000071c692c.json | 4.208 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/65bdde7ae9153000071c692c/sensors |
-| sensores/65c1f984e915300007d96c67.json | 992 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/65c1f984e915300007d96c67/sensors |
-| sensores/65c3b39de91530000718fc8e.json | 4.287 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/65c3b39de91530000718fc8e/sensors |
-| sensores/65c4e177e9153000074a9062.json | 1.711 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/65c4e177e9153000074a9062/sensors |
-| sensores/6606b5e093fed60007627629.json | 990 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/6606b5e093fed60007627629/sensors |
-| sensores/661d6edc1a903a0008c7a494.json | 1.919 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/661d6edc1a903a0008c7a494/sensors |
-| sensores/66431269eb5aad0007b2ed69.json | 1.913 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/66431269eb5aad0007b2ed69/sensors |
-| sensores/664324d0eb5aad0007d39b9c.json | 1.908 | 2026-09-29T22:42 | https://api.opensensemap.org/boxes/664324d0eb5aad0007d39b9c/sensors |
-| sensores/665edbba5a5e5e000734f495.json | 1.910 | 2026-09-29T22:43 | https://api.opensensemap.org/boxes/665edbba5a5e5e000734f495/sensors |
-| sensores/66616f165a5e5e0007a3301d.json | 1.910 | 2026-09-29T22:43 | https://api.opensensemap.org/boxes/66616f165a5e5e0007a3301d/sensors |
-| sensores/67a3b23c4ef45d0008c0addb.json | 1.913 | 2026-09-29T22:43 | https://api.opensensemap.org/boxes/67a3b23c4ef45d0008c0addb/sensors |
-| sensores/683a1fc8a07e8d0007e3844a.json | 1.908 | 2026-09-29T22:43 | https://api.opensensemap.org/boxes/683a1fc8a07e8d0007e3844a/sensors |
-| sensores/6919fd5c76f3f70008234193.json | 1.880 | 2026-09-29T22:43 | https://api.opensensemap.org/boxes/6919fd5c76f3f70008234193/sensors |
-| sensores/691a11f576f3f7000846cc59.json | 1.893 | 2026-09-29T22:43 | https://api.opensensemap.org/boxes/691a11f576f3f7000846cc59/sensors |
-| sensores/691cfe29f9fd4000076a08fb.json | 993 | 2026-09-29T22:43 | https://api.opensensemap.org/boxes/691cfe29f9fd4000076a08fb/sensors |
+| sensores/6391c79670c7ae001b0e1985.json | 992 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/6391c79670c7ae001b0e1985/sensors |
+| sensores/63e39c28880265000751e48c.json | 648 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/63e39c28880265000751e48c/sensors |
+| sensores/6411c53df954a70008b20a76.json | 853 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/6411c53df954a70008b20a76/sensors |
+| sensores/641dbb33bbc9860008032fdc.json | 992 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/641dbb33bbc9860008032fdc/sensors |
+| sensores/647650c8ccc90f000712f623.json | 1.901 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/647650c8ccc90f000712f623/sensors |
+| sensores/6478aac1e8df1c00083f7273.json | 1.916 | 2026-10-20T21:28 | https://api.opensensemap.org/boxes/6478aac1e8df1c00083f7273/sensors |
+| sensores/65bdde7ae9153000071c692c.json | 4.208 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/65bdde7ae9153000071c692c/sensors |
+| sensores/65c1f984e915300007d96c67.json | 993 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/65c1f984e915300007d96c67/sensors |
+| sensores/65c3b39de91530000718fc8e.json | 4.280 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/65c3b39de91530000718fc8e/sensors |
+| sensores/65c4e177e9153000074a9062.json | 1.710 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/65c4e177e9153000074a9062/sensors |
+| sensores/6606b5e093fed60007627629.json | 990 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/6606b5e093fed60007627629/sensors |
+| sensores/661d6edc1a903a0008c7a494.json | 1.915 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/661d6edc1a903a0008c7a494/sensors |
+| sensores/66431269eb5aad0007b2ed69.json | 1.909 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/66431269eb5aad0007b2ed69/sensors |
+| sensores/664324d0eb5aad0007d39b9c.json | 1.907 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/664324d0eb5aad0007d39b9c/sensors |
+| sensores/665edbba5a5e5e000734f495.json | 1.910 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/665edbba5a5e5e000734f495/sensors |
+| sensores/66616f165a5e5e0007a3301d.json | 1.908 | 2026-10-22T22:48 | https://api.opensensemap.org/boxes/66616f165a5e5e0007a3301d/sensors |
 
-… y 5 archivos más del mismo patrón.
+… y 11 archivos más del mismo patrón.
 
 ### `eea`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| aq_statistics_p1.json | 360.674 | 2026-09-29T22:28 | https://discodata.eea.europa.eu/sql?query=SELECT AirQualityStationEoICode, AQStationName, AirQualityStationType, AirQualityStationArea, Long |
+| aq_statistics_p1.json | 361.096 | 2026-10-22T22:47 | https://discodata.eea.europa.eu/sql?query=SELECT AirQualityStationEoICode, AQStationName, AirQualityStationType, AirQualityStationArea, Long |
 
 ### `open_meteo`
 
 | archivo | bytes | ingesta | origen |
 |---|---|---|---|
-| archivo_diario.json | 313.972 | 2026-09-29T22:43 | https://archive-api.open-meteo.com/v1/archive |
-| calidad_aire.json | 5.309 | 2026-09-29T22:43 | https://air-quality-api.open-meteo.com/v1/air-quality |
-| pronostico.json | 5.034 | 2026-09-29T22:43 | https://api.open-meteo.com/v1/forecast |
+| archivo_diario.json | 314.699 | 2026-10-22T22:48 | https://archive-api.open-meteo.com/v1/archive |
+| calidad_aire.json | 5.342 | 2026-10-22T22:48 | https://air-quality-api.open-meteo.com/v1/air-quality |
+| pronostico.json | 5.027 | 2026-10-22T22:48 | https://api.open-meteo.com/v1/forecast |
 
 ## 4. Silver · tablas (datalake/silver/budapest.sqlite)
 
@@ -320,7 +325,7 @@ Estadística zonal de capas HRL 2018 (píxel 10 m) sobre el polígono de cada di
 | pct_alto | REAL | % de superficie | IMD: píxeles ≥ 80 % sellados; TCD: píxeles con cobertura ≥ 10 % |
 | pixeles | INTEGER | píxeles | Píxeles válidos considerados |
 
-### `gtfs_rutas` · 388 filas
+### `gtfs_rutas` · 391 filas
 
 Líneas del transporte público de BKK (routes.txt) con viajes programados el día de referencia.  
 **Fuente:** `bkk_gtfs` · **Grano:** 1 fila por route_id
@@ -335,7 +340,7 @@ Líneas del transporte público de BKK (routes.txt) con viajes programados el d�
 | color | TEXT | hex | route_color |
 | viajes_dia_ref | INTEGER | viajes/día | Viajes activos el día laborable de referencia |
 
-### `gtfs_paradas` · 6.313 filas
+### `gtfs_paradas` · 6.311 filas
 
 Paradas y andenes (stops.txt) con oferta programada del día laborable de referencia.  
 **Fuente:** `bkk_gtfs` · **Grano:** 1 fila por stop_id
@@ -354,7 +359,7 @@ Paradas y andenes (stops.txt) con oferta programada del día laborable de refere
 | modos | TEXT |  | Modos que sirven la parada, separados por coma |
 | distrito_id | INTEGER | 1–23 | Número de kerület (distrito) de Budapest asignado por punto-en-polígono con los límites OSM; NULL si cae fuera |
 
-### `gtfs_lineas_geom` · 60 filas
+### `gtfs_lineas_geom` · 57 filas
 
 Trazado representativo (shape más frecuente) simplificado con Douglas-Peucker (~10 m).  
 **Fuente:** `bkk_gtfs` · **Grano:** 1 fila por ruta de modo guiado (metro, tranvía, trolebús, HÉV, ferry)
@@ -421,7 +426,7 @@ Estaciones MOL Bubi con disponibilidad en el momento de la ingesta.
 | origen | TEXT |  | nextbike_vivo (feed del operador con disponibilidad) \| osm (respaldo: amenity=bicycle_rental de OSM, sin disponibilidad) |
 | distrito_id | INTEGER | 1–23 | Número de kerület (distrito) de Budapest asignado por punto-en-polígono con los límites OSM; NULL si cae fuera |
 
-### `bubi_historico` · 1 filas
+### `bubi_historico` · 3 filas
 
 Serie de instantáneas agregadas del sistema MOL Bubi.  
 **Fuente:** `bubi` · **Grano:** 1 fila por ejecución (se acumula)
@@ -449,7 +454,7 @@ Series HVD de KSH (SDMX-CSV) filtradas a Hungría (HU), Budapest NUTS2 (HU11) y 
 | edad | TEXT |  | AGE SDMX (Y_LT5, Y5-9…, TOTAL, Y_LT1) |
 | valor | REAL | según indicador | OBS_VALUE |
 
-### `eurostat_obs` · 1.834 filas
+### `eurostat_obs` · 1.835 filas
 
 Observaciones JSON-stat aplanadas para Budapest (HU11, HU110, ciudad HU001C) y Hungría cuando no hay regional.  
 **Fuente:** `eurostat` · **Grano:** 1 fila por dataset × combinación de dimensiones × periodo
@@ -466,7 +471,7 @@ Observaciones JSON-stat aplanadas para Budapest (HU11, HU110, ciudad HU001C) y H
 | valor | REAL | según unidad | Valor |
 | flag | TEXT |  | Estado Eurostat (p provisional, e estimado, b ruptura) |
 
-### `ksh_distritos_historico` · 138 filas
+### `ksh_distritos_historico` · 161 filas
 
 Población, superficie y viviendas por distrito según cada edición del Helységnévtár descargada.  
 **Fuente:** `ksh` · **Grano:** 1 fila por distrito × año del Helységnévtár
@@ -513,7 +518,7 @@ Estadísticas anuales oficiales (E1a validado; E2a para el año en curso).
 | verificacion | INTEGER | 1/2/3 | 1 verificado, 2 preliminar, 3 no verificado |
 | flujo | TEXT |  | SourceDataFlow (E1a / E2a) |
 
-### `sc_sensores` · 190 filas
+### `sc_sensores` · 188 filas
 
 Promedio de 5 minutos de sensores ciudadanos en un radio de 20 km del centro (solo exteriores).  
 **Fuente:** `sensor_community` · **Grano:** 1 fila por sensor en la instantánea
@@ -532,7 +537,7 @@ Promedio de 5 minutos de sensores ciudadanos en un radio de 20 km del centro (so
 | ts | TEXT | UTC | timestamp de la medición |
 | distrito_id | INTEGER | 1–23 | Número de kerület (distrito) de Budapest asignado por punto-en-polígono con los límites OSM; NULL si cae fuera |
 
-### `sc_historico` · 1 filas
+### `sc_historico` · 3 filas
 
 Mediana urbana de PM2.5/PM10 de sensores ciudadanos en cada instantánea.  
 **Fuente:** `sensor_community` · **Grano:** 1 fila por ejecución (se acumula)
@@ -544,7 +549,7 @@ Mediana urbana de PM2.5/PM10 de sensores ciudadanos en cada instantánea.
 | pm25_mediana | REAL | µg/m³ |  |
 | pm10_mediana | REAL | µg/m³ |  |
 
-### `osem_sensores` · 1.004 filas
+### `osem_sensores` · 1.006 filas
 
 Último valor de cada sensor de las senseBoxes exteriores de Budapest.  
 **Fuente:** `opensensemap` · **Grano:** 1 fila por sensor de senseBox dentro del bbox
@@ -565,7 +570,7 @@ Mediana urbana de PM2.5/PM10 de sensores ciudadanos en cada instantánea.
 | lon | REAL | grados |  |
 | distrito_id | INTEGER | 1–23 | Número de kerület (distrito) de Budapest asignado por punto-en-polígono con los límites OSM; NULL si cae fuera |
 
-### `meteo_diario` · 9.768 filas
+### `meteo_diario` · 9.791 filas
 
 Reanálisis ERA5 vía Open-Meteo Archive en el centro de Budapest.  
 **Fuente:** `open_meteo` · **Grano:** 1 fila por día (desde 2000-01-01)
@@ -606,13 +611,13 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 
 | clave | etiqueta | unidad | fuente | estado | vigencia | nota |
 |---|---|---|---|---|---|---|
-| pm25_anual | PM2.5 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2025 | Guía OMS 2021: 5 µg/m³ · límite UE: 25 µg/m³ |
-| pm10_anual | PM10 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2025 | Guía OMS 2021: 15 µg/m³ · límite UE: 40 µg/m³ |
-| no2_anual | NO2 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2025 | Guía OMS 2021: 10 µg/m³ · límite UE: 40 µg/m³ |
-| estaciones_eea | Estaciones oficiales con reporte a la EEA | estaciones | eea | observado | 2025 |  |
-| pm25_ciudadano | PM2.5 ahora · mediana de sensores ciudadanos | µg/m³ | sensor_community | en_vivo | 2026-09-29 22:27:58 | Promedio de 5 minutos; sensores ópticos de bajo costo (sobreestiman con humedad alta). |
-| sensores_ciudadanos | Sensores ciudadanos de partículas en Budapest | sensores | sensor_community | en_vivo | 2026-09-29 22:27:58 |  |
-| sensebox | senseBoxes con datos en los últimos 7 días | cajas | opensensemap | en_vivo | 2026-09-29 | 175 cajas registradas en el área |
+| pm25_anual | PM2.5 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2026 | Guía OMS 2021: 5 µg/m³ · límite UE: 25 µg/m³ |
+| pm10_anual | PM10 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2026 | Guía OMS 2021: 15 µg/m³ · límite UE: 40 µg/m³ |
+| no2_anual | NO2 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2026 | Guía OMS 2021: 10 µg/m³ · límite UE: 40 µg/m³ |
+| estaciones_eea | Estaciones oficiales con reporte a la EEA | estaciones | eea | observado | 2026 |  |
+| pm25_ciudadano | PM2.5 ahora · mediana de sensores ciudadanos | µg/m³ | sensor_community | en_vivo | 2026-10-22 22:47:02 | Promedio de 5 minutos; sensores ópticos de bajo costo (sobreestiman con humedad alta). |
+| sensores_ciudadanos | Sensores ciudadanos de partículas en Budapest | sensores | sensor_community | en_vivo | 2026-10-22 22:47:02 |  |
+| sensebox | senseBoxes con datos en los últimos 7 días | cajas | opensensemap | en_vivo | 2026-10-22 | 176 cajas registradas en el área |
 | temp_anual | Temperatura media del último año completo | °C | open_meteo | modelado | 2025 |  |
 | anomalia | Anomalía frente a 2000–2009 | °C | open_meteo | derivado | 2025 |  |
 | dias_calor | Días con máxima ≥ 30 °C | días | open_meteo | modelado | 2025 |  |
@@ -624,11 +629,12 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 
 | clave | etiqueta | unidad | fuente | puntos | rango | subseries |
 |---|---|---|---|---|---|---|
-| particulas | Partículas: media anual de estaciones oficiales | µg/m³ | eea | 23 | 2003 – 2025 | PM10, PM2.5 |
-| no2 | NO₂: media anual de estaciones oficiales | µg/m³ | eea | 24 | 1997 – 2025 | — |
+| particulas | Partículas: media anual de estaciones oficiales | µg/m³ | eea | 24 | 2003 – 2026 | PM10, PM2.5 |
+| no2 | NO₂: media anual de estaciones oficiales | µg/m³ | eea | 25 | 1997 – 2026 | — |
 | pm10_dias | Días con PM10 > 50 µg/m³ (estación más expuesta) | días | eea | 24 | 2003 – 2026 | — |
-| cams_pm25 | PM2.5 modelado CAMS (−2 a +3 días) | µg/m³ | open_meteo | 120 | 2026-09-28T00:00 – 2026-10-02T23:00 | PM2.5, PM10 |
-| temperatura_horaria | Temperatura (−2 a +3 días) | °C | open_meteo | 120 | 2026-09-28T00:00 – 2026-10-02T23:00 | — |
+| pm25_ciudadano | PM2.5 ciudadano por instantánea | µg/m³ | sensor_community | 3 | 2026-09-29T22:28:00Z – 2026-10-22T22:47:00Z | — |
+| cams_pm25 | PM2.5 modelado CAMS (−2 a +3 días) | µg/m³ | open_meteo | 120 | 2026-10-21T00:00 – 2026-10-25T23:00 | PM2.5, PM10 |
+| temperatura_horaria | Temperatura (−2 a +3 días) | °C | open_meteo | 120 | 2026-10-21T00:00 – 2026-10-25T23:00 | — |
 | temperatura_anual | Temperatura media anual | °C | open_meteo | 26 | 2000 – 2025 | — |
 | dias_calor | Días con máxima ≥ 30 °C | días | open_meteo | 26 | 2000 – 2025 | — |
 
@@ -646,8 +652,8 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 
 | clave | etiqueta | unidad | fuente | estado | vigencia | nota |
 |---|---|---|---|---|---|---|
-| fuentes_ok | Fuentes operativas | de 12 | lago | derivado | 2026-09-29 |  |
-| bronze_mb | Volumen crudo acumulado en bronze | MB | lago | derivado | 2026-09-29 |  |
+| fuentes_ok | Fuentes operativas | de 12 | lago | derivado | 2026-10-22 |  |
+| bronze_mb | Volumen crudo acumulado en bronze | MB | lago | derivado | 2026-10-22 |  |
 
 **Listas**
 
@@ -695,8 +701,8 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 
 | clave | etiqueta | unidad | fuente | estado | vigencia | nota |
 |---|---|---|---|---|---|---|
-| metricas_n | Métricas por distrito | métricas | lago | derivado | 2026-09-29 |  |
-| pares_n | Pares de métricas comparables | pares | lago | derivado | 2026-09-29 |  |
+| metricas_n | Métricas por distrito | métricas | lago | derivado | 2026-10-22 |  |
+| pares_n | Pares de métricas comparables | pares | lago | derivado | 2026-10-22 |  |
 
 **Listas**
 
@@ -720,7 +726,7 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 | riesgo_pobreza_exclusion | Riesgo de pobreza o exclusión (AROPE) | % | eurostat | observado | 2025 |  |
 | educacion_terciaria | Población 25–64 con estudios terciarios | % | eurostat | observado | 2025 |  |
 | gasto_id_pib | Gasto en I+D | % PIB | eurostat | observado | 2024 |  |
-| precio_vivienda | Índice de precios de vivienda (Hungría) | 2015 = 100 | eurostat | observado | 2026 | Eurostat no publica el índice a escala regional: referencia nacional. |
+| precio_vivienda | Índice de precios de vivienda (Hungría) | 2015 = 100 | eurostat | observado | 2026-T2 | Eurostat no publica el índice a escala regional: referencia nacional. |
 | empresas_activas | Empresas activas (HU110) | empresas | eurostat | observado | 2020 |  |
 | viviendas_1000 | Viviendas por 1.000 habitantes | viv/1.000 hab | ksh | derivado | 2026 |  |
 
@@ -735,7 +741,7 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 | riesgo_pobreza_exclusion | Riesgo de pobreza o exclusión (AROPE) | % | eurostat | 8 | 2018 – 2025 | — |
 | educacion_terciaria | Población 25–64 con estudios terciarios | % | eurostat | 13 | 2013 – 2025 | — |
 | gasto_id_pib | Gasto en I+D | % PIB | eurostat | 8 | 2017 – 2024 | — |
-| precio_vivienda | Índice de precios de vivienda · Hungría | 2015 = 100 | eurostat | 77 | 2007 – 2026 | — |
+| precio_vivienda | Índice de precios de vivienda · Hungría | 2015 = 100 | eurostat | 78 | 2007 – 2026-T2 | — |
 
 **Listas**
 
@@ -750,13 +756,13 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 
 | clave | etiqueta | unidad | fuente | estado | vigencia | nota |
 |---|---|---|---|---|---|---|
-| viajes_dia | Viajes programados en un día laborable | viajes | bkk_gtfs | observado | 2026-09-30 | Miércoles de referencia 2026-09-30; feed 2775.20260929 (mobilitydb) |
-| detenciones_dia | Detenciones programadas por día laborable | detenciones | bkk_gtfs | observado | 2026-09-30 |  |
-| paradas | Paradas y andenes con servicio | paradas | bkk_gtfs | observado | 2026-09-30 |  |
-| accesibles | Paradas declaradas accesibles en silla de ruedas | % | bkk_gtfs | observado | 2026-09-30 |  |
-| lineas | Líneas con servicio el día de referencia | líneas | bkk_gtfs | observado | 2026-09-30 |  |
-| bubi_estaciones | Estaciones MOL Bubi (cartografía OSM) | estaciones | osm_overpass | observado | 2026-09-29 | El feed del operador no publica estaciones: ubicaciones de amenity=bicycle_rental en OSM, sin disponibilidad. |
-| bubi_flota | Flota objetivo de MOL Bubi declarada por el operador | bicicletas | bubi | en_vivo | 2026-09-29 |  |
+| viajes_dia | Viajes programados en un día laborable | viajes | bkk_gtfs | observado | 2026-10-28 | Miércoles de referencia 2026-10-28; feed 2814.20261023 (bkk) |
+| detenciones_dia | Detenciones programadas por día laborable | detenciones | bkk_gtfs | observado | 2026-10-28 |  |
+| paradas | Paradas y andenes con servicio | paradas | bkk_gtfs | observado | 2026-10-28 |  |
+| accesibles | Paradas declaradas accesibles en silla de ruedas | % | bkk_gtfs | observado | 2026-10-28 |  |
+| lineas | Líneas con servicio el día de referencia | líneas | bkk_gtfs | observado | 2026-10-28 |  |
+| bubi_estaciones | Estaciones MOL Bubi (cartografía OSM) | estaciones | osm_overpass | observado | 2026-10-22 | El feed del operador no publica estaciones: ubicaciones de amenity=bicycle_rental en OSM, sin disponibilidad. |
+| bubi_flota | Flota objetivo de MOL Bubi declarada por el operador | bicicletas | bubi | en_vivo | 2026-10-22 |  |
 | turismos | Parque de turismos (HU11) | vehículos | eurostat | observado | 2024 |  |
 | motorizacion | Motorización | turismos/1.000 hab | eurostat | derivado | 2024 |  |
 
@@ -782,20 +788,20 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 
 | clave | etiqueta | unidad | fuente | estado | vigencia | nota |
 |---|---|---|---|---|---|---|
-| poblacion | Población residente (23 distritos) | hab | ksh | observado | 2025-01-01 |  |
-| superficie | Superficie | km² | ksh | observado | 2025-01-01 |  |
-| densidad | Densidad media | hab/km² | ksh | derivado | 2025 |  |
-| viviendas | Viviendas | viviendas | ksh | observado | 2025-01-01 |  |
-| distritos | Distritos | kerületek | osm_overpass | observado | 2026-09-29 |  |
+| poblacion | Población residente (23 distritos) | hab | ksh | observado | 2026-01-01 |  |
+| superficie | Superficie | km² | ksh | observado | 2026-01-01 |  |
+| densidad | Densidad media | hab/km² | ksh | derivado | 2026 |  |
+| viviendas | Viviendas | viviendas | ksh | observado | 2026-01-01 |  |
+| distritos | Distritos | kerületek | osm_overpass | observado | 2026-10-22 |  |
 | edificios | Edificios cartografiados en OSM | edificios | osm_overpass | observado | 2026-09-29 |  |
-| poi | Equipamientos y servicios OSM clasificados | puntos | osm_overpass | observado | 2026-09-29 |  |
-| osm_replica | Réplica OSM de referencia (Geofabrik) |  | geofabrik | observado | 2026-09-28 | Extracto Hungría .osm.pbf de 326 MB, secuencia 4924 |
+| poi | Equipamientos y servicios OSM clasificados | puntos | osm_overpass | observado | 2026-10-22 |  |
+| osm_replica | Réplica OSM de referencia (Geofabrik) |  | geofabrik | observado | 2026-10-21 | Extracto Hungría .osm.pbf de 327 MB, secuencia 4946 |
 
 **Series** (`puntos` = `[[x, y], …]`; con varias series, `series[].puntos`)
 
 | clave | etiqueta | unidad | fuente | puntos | rango | subseries |
 |---|---|---|---|---|---|---|
-| poblacion_helysegnevtar | Población de Budapest (suma de distritos) | hab | ksh | 6 | 2020 – 2025 | — |
+| poblacion_helysegnevtar | Población de Budapest (suma de distritos) | hab | ksh | 7 | 2020 – 2026 | — |
 
 **Listas**
 
@@ -814,8 +820,8 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 | pct_extranjeros | Pernoctaciones de no residentes | % | eurostat | derivado | 2025 |  |
 | llegadas | Llegadas de huéspedes (HU11) | llegadas | eurostat | observado | 2025 |  |
 | estancia_media | Estancia media | noches | eurostat | derivado | 2025 |  |
-| alojamientos_osm | Alojamientos cartografiados (OSM) | establec. | osm_overpass | observado | 2026-09-29 |  |
-| atractivos_osm | Museos, atractivos y cultura (OSM) | lugares | osm_overpass | observado | 2026-09-29 |  |
+| alojamientos_osm | Alojamientos cartografiados (OSM) | establec. | osm_overpass | observado | 2026-10-22 |  |
+| atractivos_osm | Museos, atractivos y cultura (OSM) | lugares | osm_overpass | observado | 2026-10-22 |  |
 
 **Series** (`puntos` = `[[x, y], …]`; con varias series, `series[].puntos`)
 
@@ -866,10 +872,10 @@ Cada `score_<dimensión>` es el promedio de las métricas de esa dimensión norm
 | archivo | geometría | propiedades | origen silver | elementos |
 |---|---|---|---|---|
 | distritos.geojson | MultiPolygon | 23 distritos simplificados (~13 m) con todas las métricas del atlas y score_<dimensión> 0–100 | distritos + métricas gold | 23 |
-| paradas.geojson | Point | n nombre · s salidas día ref. · r rutas · m modos · d distrito | gtfs_paradas | 5586 |
-| lineas.geojson | LineString | modo · linea · color | gtfs_lineas_geom | 60 |
+| paradas.geojson | Point | n nombre · s salidas día ref. · r rutas · m modos · d distrito | gtfs_paradas | 5562 |
+| lineas.geojson | LineString | modo · linea · color | gtfs_lineas_geom | 57 |
 | bubi.geojson | Point | n nombre · b bicicletas · c anclajes · d distrito | bubi_estaciones | 228 |
-| sensores.geojson | Point | f fuente (sensor_community\|opensensemap) · id · pm25 · pm10 · t temperatura · ts · d distrito | sc_sensores + osem_sensores | 234 |
+| sensores.geojson | Point | f fuente (sensor_community\|opensensemap) · id · pm25 · pm10 · t temperatura · ts · d distrito | sc_sensores + osem_sensores | 233 |
 | eea.geojson | Point | estacion · nombre · tipo · area · PM25 · PM10 · NO2 · O3 (último año) · anio | eea_estaciones + eea_estadisticas | 15 |
 | poi.geojson | Point | c categoría · s subcategoría OSM · n nombre · d distrito | osm_poi | 16889 |
 
