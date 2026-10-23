@@ -6,8 +6,11 @@ Contrato de cada tema:
    series:{clave:{etiqueta,unidad,fuente,vigencia,puntos:[[x,y]] | series:[{nombre,puntos}], nota?}},
    listas:{clave:[{...}]}}
 estado ∈ observado (medido por la fuente) · derivado (cálculo propio sobre datos observados) ·
-         modelado (salida de un modelo: ERA5, CAMS) · en_vivo (instantánea del momento de ingesta) · proxy.
+         modelo (salida de un modelo, no medición: Open-Meteo/ERA5, CAMS) · bajo_costo (sensores ciudadanos de bajo costo,
+         sin calibración oficial) · en_vivo (instantánea del momento de ingesta) · proxy.
+Las series llevan el mismo campo «estado» para que los gráficos muestren si son medición, modelo o bajo costo.
 """
+import datetime as dt
 import json
 import math
 import shutil
@@ -21,10 +24,36 @@ T = config.GOLD / "temas"
 G = config.GOLD / "geo"
 
 
+ESTADO = {}  # estado_fuentes.json de la ejecución; lo fija publicar()
+
+
 # ------------------------------------------------------------------ utilidades
+def probada(fid):
+    """Fecha (hora local) en que la fuente respondió por última vez: la «fecha en que la probaron» del Excel."""
+    if fid == "lago":
+        return lago.HOY
+    modulo = config.FUENTES.get(fid, {}).get("modulo", fid)
+    ts = ESTADO.get(modulo, {}).get("ultima_ingesta")
+    return dt.datetime.fromisoformat(ts).astimezone().date().isoformat() if ts else None
+
+
 def fuente(fid):
+    """Ficha de procedencia que el sitio muestra a un clic: ID F, nombre, enlace, licencia y fecha de prueba."""
+    if fid == "lago":
+        return {"id": "lago", "codigo": "Lago", "nombre": "Cálculo propio del lago sobre las fuentes F02–F14", "url": "",
+                "licencia": "—", "probada": lago.HOY, "estado": "ok"}
     f = config.FUENTES[fid]
-    return {"id": fid, "nombre": f["nombre"], "url": f["url"], "licencia": f["licencia"]}
+    modulo = f.get("modulo", fid)
+    return {"id": fid, "codigo": f["codigo"], "nombre": f["nombre"], "url": f["url"], "licencia": f["licencia"],
+            "probada": probada(fid), "estado": ESTADO.get(modulo, {}).get("estado", "pendiente")}
+
+
+def completar_fuentes(t):
+    """Toda fuente citada por una cifra o serie del tema queda en su lista de fuentes (con ID y fecha de prueba)."""
+    usadas = {c["fuente"] for c in t["cifras"].values()} | {x["fuente"] for x in t["series"].values()}
+    ya = {f["id"] for f in t["fuentes"]}
+    t["fuentes"] += [fuente(f) for f in sorted(usadas - ya)]
+    return t
 
 
 def tema(nombre, titulo, fuentes):
@@ -50,7 +79,7 @@ def cifra(t, clave, valor, unidad, etiqueta, fid, vigencia, estado="observado", 
     t["cifras"][clave] = c
 
 
-def serie(t, clave, etiqueta, unidad, fid, puntos=None, series=None, nota=None, tipo=None):
+def serie(t, clave, etiqueta, unidad, fid, puntos=None, series=None, nota=None, tipo=None, estado=None):
     ps = puntos or (series[0]["puntos"] if series else [])
     if not ps:
         return
@@ -64,6 +93,8 @@ def serie(t, clave, etiqueta, unidad, fid, puntos=None, series=None, nota=None, 
         s["nota"] = nota
     if tipo:
         s["tipo"] = tipo
+    if estado:
+        s["estado"] = estado
     t["series"][clave] = s
 
 
@@ -115,7 +146,7 @@ METRICAS = [
     ("paradas_km2", "Paradas con servicio por km²", "paradas/km²", "bkk_gtfs", "derivado", "movilidad", "dir", "paradas (location_type 0) con ≥1 salida el día de referencia / km²"),
     ("salidas_1000", "Salidas de transporte público por 1.000 hab", "salidas/día", "bkk_gtfs", "derivado", "movilidad", "dir", "Σ stop_times del día laborable de referencia / población × 1.000"),
     ("guiado_pct", "Paradas servidas por modo guiado", "%", "bkk_gtfs", "derivado", "movilidad", "dir", "paradas con metro, tranvía, trolebús o HÉV / paradas con servicio"),
-    ("bubi_km2", "Estaciones MOL Bubi por km²", "est/km²", "bubi", "en_vivo", "movilidad", "dir", "estaciones con número / km²"),
+    ("bubi_km2", "Estaciones MOL Bubi por km²", "est/km²", "osm_overpass", "observado", "movilidad", "dir", "estaciones OSM amenity=bicycle_rental de la red MOL Bubi / km²"),
     ("educacion_10k", "Centros educativos por 10.000 hab", "centros", "osm_overpass", "derivado", "servicios", "dir", "POI categoría educacion / población × 10.000"),
     ("salud_10k", "Equipamientos de salud por 10.000 hab", "equip.", "osm_overpass", "derivado", "servicios", "dir", "POI categoría salud / población × 10.000"),
     ("cultura_km2", "Cultura y turismo por km²", "POI/km²", "osm_overpass", "derivado", "servicios", "dir", "POI cultura + turismo / km²"),
@@ -127,7 +158,7 @@ METRICAS = [
     ("sellado", "Suelo sellado medio", "%", "copernicus", "observado", "verde", "inv", "Media de Imperviousness Density 2018 (0–100)"),
     ("sellado_alto", "Superficie muy sellada (≥80 %)", "% sup.", "copernicus", "observado", None, None, "Píxeles con IMD ≥ 80 / píxeles válidos"),
     ("edificios_km2", "Edificios OSM por km²", "edif./km²", "osm_overpass", "derivado", None, None, "building=* (vías + relaciones) / km²"),
-    ("pm25_sensores", "PM2.5 ciudadano (mediana)", "µg/m³", "sensor_community", "en_vivo", "ambiente", "inv", "Mediana de sensores exteriores del distrito en la instantánea"),
+    ("pm25_sensores", "PM2.5 ciudadano de bajo costo (mediana)", "µg/m³", "sensor_community", "bajo_costo", "ambiente", "inv", "Mediana de sensores ciudadanos exteriores de bajo costo del distrito en la instantánea (mínimo 2)"),
 ]
 DIMENSIONES = {
     "movilidad": {"nombre": "Movilidad", "descripcion": "Oferta de transporte público y bicicleta"},
@@ -276,30 +307,30 @@ def t_territorio(con, filas, estado):
 
 
 def t_demografia(con, filas):
-    t = tema("demografia", "Gente", ["ksh", "eurostat"])
+    t = tema("demografia", "Gente", ["ksh_hvd", "ksh_hvd", "eurostat"])
     pob = ksh(con, "NR")
     a, v = ultimo(pob)
-    cifra(t, "poblacion_nuts3", v, "hab", "Población al 1 de enero (NUTS3 HU110)", "ksh", a)
+    cifra(t, "poblacion_nuts3", v, "hab", "Población al 1 de enero (NUTS3 HU110)", "ksh_hvd", a)
     for ind, clave, et, u in (("MEDAGEPOP", "edad_mediana", "Edad mediana", "años"), ("OLDDEP3", "dependencia_vejez", "Dependencia de vejez (65+ / 20–64)", "%"),
                               ("GBIRTHRT", "natalidad", "Tasa bruta de natalidad", "‰"), ("GDEATHRT", "mortalidad", "Tasa bruta de mortalidad", "‰")):
         s = ksh(con, ind) or ksh(con, ind, "HU11")
         a, v = ultimo(s)
-        cifra(t, clave, v, u, et, "ksh", a, decimales=1)
+        cifra(t, clave, v, u, et, "ksh_hvd", a, decimales=1)
     ev = ksh(con, "YR", "HU11", "T", "Y_LT1")
     a, v = ultimo(ev)
-    cifra(t, "esperanza_vida", v, "años", "Esperanza de vida al nacer (HU11)", "ksh", a, decimales=1)
+    cifra(t, "esperanza_vida", v, "años", "Esperanza de vida al nacer (HU11)", "ksh_hvd", a, decimales=1)
     mi = ksh(con, "RT", "HU11")
     a, v = ultimo(mi)
-    cifra(t, "mortalidad_infantil", v, "‰", "Mortalidad infantil (HU11)", "ksh", a, decimales=1)
+    cifra(t, "mortalidad_infantil", v, "‰", "Mortalidad infantil (HU11)", "ksh_hvd", a, decimales=1)
 
-    serie(t, "poblacion", "Población de Budapest (HU110)", "hab", "ksh", pob)
-    serie(t, "edad_mediana", "Edad mediana", "años", "ksh", series=[
+    serie(t, "poblacion", "Población de Budapest (HU110)", "hab", "ksh_hvd", pob)
+    serie(t, "edad_mediana", "Edad mediana", "años", "ksh_hvd", series=[
         {"nombre": "Budapest", "puntos": ksh(con, "MEDAGEPOP")}, {"nombre": "Hungría", "puntos": ksh(con, "MEDAGEPOP", "HU")}])
-    serie(t, "esperanza_vida", "Esperanza de vida al nacer", "años", "ksh", series=[
+    serie(t, "esperanza_vida", "Esperanza de vida al nacer", "años", "ksh_hvd", series=[
         {"nombre": "Mujeres", "puntos": ksh(con, "YR", "HU11", "F", "Y_LT1")}, {"nombre": "Hombres", "puntos": ksh(con, "YR", "HU11", "M", "Y_LT1")}])
-    serie(t, "natalidad_mortalidad", "Natalidad y mortalidad", "‰", "ksh", series=[
+    serie(t, "natalidad_mortalidad", "Natalidad y mortalidad", "‰", "ksh_hvd", series=[
         {"nombre": "Natalidad", "puntos": ksh(con, "GBIRTHRT", "HU11")}, {"nombre": "Mortalidad", "puntos": ksh(con, "GDEATHRT", "HU11")}])
-    serie(t, "dependencia", "Dependencia de vejez", "%", "ksh", series=[
+    serie(t, "dependencia", "Dependencia de vejez", "%", "ksh_hvd", series=[
         {"nombre": "Budapest", "puntos": ksh(con, "OLDDEP3")}, {"nombre": "Hungría", "puntos": ksh(con, "OLDDEP3", "HU")}])
 
     # pirámide del último año con grupos quinquenales
@@ -309,7 +340,7 @@ def t_demografia(con, filas):
         con, "SELECT sexo, edad, valor FROM ksh_hvd WHERE indicador='NR' AND geo='HU110' AND anio=?", ult)}
     etiqueta = lambda g: "0–4" if g == "Y_LT5" else ("85+" if g == "Y_GE85" else g[1:].replace("-", "–"))
     t["listas"]["piramide"] = [{"grupo": etiqueta(g), "hombres": val.get(("M", g)), "mujeres": val.get(("F", g))} for g in grupos]
-    t["listas"]["piramide_meta"] = [{"anio": ult, "fuente": "ksh"}]
+    t["listas"]["piramide_meta"] = [{"anio": ult, "fuente": "ksh_hvd"}]
     t["listas"]["poblacion_distritos"] = sorted(
         [{"distrito": f"{f['romano']} · {f['apodo']}", "poblacion": f["poblacion"], "var_poblacion": f["var_poblacion"],
           "densidad": f["densidad"]} for f in filas], key=lambda x: -(x["poblacion"] or 0))
@@ -337,8 +368,12 @@ def t_economia(con, filas):
         serie(t, clave, et, u, "eurostat", s)
     hpi = eu(con, "precio_vivienda_hu", purchase="TOTAL", unit="I15_Q")
     a, v = ultimo(hpi)
-    cifra(t, "precio_vivienda", v, "2015 = 100", "Índice de precios de vivienda (Hungría)", "eurostat", a, nota="Eurostat no publica el índice a escala regional: referencia nacional.", decimales=1)
-    serie(t, "precio_vivienda", "Índice de precios de vivienda · Hungría", "2015 = 100", "eurostat", hpi, nota="Referencia nacional.")
+    trimestre = lago.consultar(con, "SELECT MAX(periodo) p FROM eurostat_obs WHERE clave='precio_vivienda_hu'")[0]["p"]
+    a = trimestre.replace("-Q", "-T") if trimestre else a  # 2026.0 perdería el trimestre (T1)
+    cifra(t, "precio_vivienda", v, "2015 = 100", "Índice de precios de vivienda (Hungría, como proxy de Budapest)", "eurostat", a, "proxy",
+          nota="PROXY: Eurostat no publica el índice por región; se usa el de toda Hungría como aproximación para Budapest.", decimales=1)
+    serie(t, "precio_vivienda", "Índice de precios de vivienda · Hungría (proxy de Budapest)", "2015 = 100", "eurostat", hpi,
+          nota="PROXY: índice nacional usado como aproximación; no existe la serie para Budapest.", estado="proxy")
     emp = eu(con, "empresas", indic_sb="V11910", nace_r2="B-S_X_K642")
     a, v = ultimo(emp)
     cifra(t, "empresas_activas", v, "empresas", "Empresas activas (HU110)", "eurostat", a)
@@ -390,7 +425,7 @@ def t_turismo(con, filas):
 
 
 def t_movilidad(con, filas):
-    t = tema("movilidad", "Movilidad", ["bkk_gtfs", "mobilitydb", "bubi", "eurostat"])
+    t = tema("movilidad", "Movilidad", ["bkk_gtfs", "mobilitydb", "osm_overpass", "bubi", "eurostat"])
     feed = seguro(con, "gtfs_feed", "SELECT * FROM gtfs_feed")
     if feed:
         fd = feed[0]
@@ -413,20 +448,22 @@ def t_movilidad(con, filas):
             x["modos"] = ",".join(sorted(set(",".join(filter(None, (x["modos"] or "").split(","))).split(","))))
             x["lat"], x["lon"] = r(x["lat"], 5), r(x["lon"], 5)
         t["listas"]["paradas_top"] = top
-    b = seguro(con, "bubi_estaciones", "SELECT COUNT(*) n, SUM(bicis) bicis, SUM(anclajes) anclajes, MAX(ts) ts, MIN(origen) origen FROM bubi_estaciones")
+    # Bubi: las ubicaciones salen de OSM mientras el feed del operador (F07) sea candidata; la disponibilidad
+    # y la flota solo se publican cuando la fuente está integrada (existen bubi_disponibilidad / bubi_historico).
+    b = seguro(con, "bubi_estaciones", "SELECT COUNT(*) n, MIN(origen) origen FROM bubi_estaciones")
     if b and b[0]["n"]:
         vivo = b[0]["origen"] == "nextbike_vivo"
         cifra(t, "bubi_estaciones", b[0]["n"], "estaciones", "Estaciones MOL Bubi" + ("" if vivo else " (cartografía OSM)"),
-              "bubi" if vivo else "osm_overpass", b[0]["ts"][:10], "en_vivo" if vivo else "observado",
-              nota=None if vivo else "El feed del operador no publica estaciones: ubicaciones de amenity=bicycle_rental en OSM, sin disponibilidad.")
-        if vivo:
-            cifra(t, "bubi_bicis", b[0]["bicis"], "bicicletas", "Bicicletas disponibles en la instantánea", "bubi", b[0]["ts"], "en_vivo")
-            cifra(t, "bubi_ocupacion", r(100 * b[0]["bicis"] / b[0]["anclajes"], 1) if b[0]["anclajes"] else None, "%",
-                  "Ocupación de anclajes", "bubi", b[0]["ts"], "en_vivo")
-    hist = seguro(con, "bubi_historico", "SELECT ts, bicis, flota_objetivo FROM bubi_historico ORDER BY ts")
+              "bubi" if vivo else "osm_overpass", lago.HOY, "en_vivo" if vivo else "observado",
+              nota=None if vivo else "El feed del operador (F07) no publica estaciones y queda como fuente candidata: ubicaciones de OSM con red MOL Bubi, sin disponibilidad.")
+    disp = seguro(con, "bubi_disponibilidad", "SELECT SUM(bicis) bicis, SUM(anclajes) anclajes, MAX(ts) ts FROM bubi_disponibilidad")
+    if disp and disp[0]["ts"]:
+        cifra(t, "bubi_bicis", disp[0]["bicis"], "bicicletas", "Bicicletas disponibles en la instantánea", "bubi", disp[0]["ts"], "en_vivo")
+        cifra(t, "bubi_ocupacion", r(100 * disp[0]["bicis"] / disp[0]["anclajes"], 1) if disp[0]["anclajes"] else None, "%",
+              "Ocupación de anclajes", "bubi", disp[0]["ts"], "en_vivo")
+    hist = seguro(con, "bubi_historico", "SELECT ts, bicis, flota_objetivo FROM bubi_historico WHERE estaciones > 0 ORDER BY ts")
     if hist and hist[-1]["flota_objetivo"]:
         cifra(t, "bubi_flota", hist[-1]["flota_objetivo"], "bicicletas", "Flota objetivo de MOL Bubi declarada por el operador", "bubi", hist[-1]["ts"][:10], "en_vivo")
-    hist = [h for h in hist if h["bicis"] is not None]
     if len(hist) > 1:
         serie(t, "bubi_historico", "Bicicletas disponibles por instantánea", "bicicletas", "bubi", [[h["ts"], h["bicis"]] for h in hist])
     veh = eu(con, "vehiculos", vehicle="CAR", unit="NR")
@@ -445,24 +482,26 @@ def t_movilidad(con, filas):
 def t_ambiente(con, filas):
     t = tema("ambiente", "Ambiente y clima", ["eea", "sensor_community", "opensensemap", "open_meteo", "copernicus"])
     # EEA: media urbana anual = promedio de estaciones con cobertura ≥ 75 %
-    ser = {}
+    ser, n_est = {}, {}
     for c in ("PM2.5", "PM10", "NO2"):
         fs = seguro(con, "eea_estadisticas", """SELECT anio, AVG(valor) v, COUNT(*) n FROM eea_estadisticas
              WHERE contaminante=? AND agregacion='P1Y' AND cobertura>=75 GROUP BY anio ORDER BY anio""", c)
         ser[c] = [[f["anio"], r(f["v"], 1)] for f in fs]
+        n_est[c] = fs[-1]["n"] if fs else 0
     anio_val = max((p[0] for p in ser.get("PM2.5", [])), default=None)
     for c, clave in (("PM2.5", "pm25_anual"), ("PM10", "pm10_anual"), ("NO2", "no2_anual")):
         a, v = ultimo(ser[c])
         cifra(t, clave, v, "µg/m³", f"{c} media anual (estaciones oficiales)", "eea", a, "derivado",
-              nota=f"Guía OMS 2021: {config.OMS_ANUAL[c]} µg/m³ · límite UE: {config.LIMITE_UE_ANUAL[c]} µg/m³", decimales=1)
-    serie(t, "particulas", "Partículas: media anual de estaciones oficiales", "µg/m³", "eea",
+              nota=(f"Promedio de {n_est[c]} estación(es) con cobertura ≥ 75 % en {a}. "
+                    f"Guía OMS 2021: {config.OMS_ANUAL[c]} µg/m³ · límite UE: {config.LIMITE_UE_ANUAL[c]} µg/m³"), decimales=1)
+    serie(t, "particulas", "Partículas: media anual de estaciones oficiales", "µg/m³", "eea", estado="observado",
           series=[{"nombre": "PM10", "puntos": ser["PM10"]}, {"nombre": "PM2.5", "puntos": ser["PM2.5"]}],
           nota="Promedio de estaciones con cobertura ≥ 75 %. Guía OMS: PM2.5 5 · PM10 15 µg/m³.")
-    serie(t, "no2", "NO₂: media anual de estaciones oficiales", "µg/m³", "eea", ser["NO2"], nota="Guía OMS: 10 µg/m³.")
+    serie(t, "no2", "NO₂: media anual de estaciones oficiales", "µg/m³", "eea", ser["NO2"], nota="Guía OMS: 10 µg/m³.", estado="observado")
     dias = seguro(con, "eea_estadisticas", """SELECT anio, MAX(valor) v FROM eea_estadisticas WHERE contaminante='PM10'
           AND agregacion='P1Y-daysAbove50' GROUP BY anio ORDER BY anio""")
     serie(t, "pm10_dias", "Días con PM10 > 50 µg/m³ (estación más expuesta)", "días", "eea", [[d["anio"], d["v"]] for d in dias],
-          nota="La normativa UE permite 35 días al año.", tipo="barras")
+          nota="La normativa UE permite 35 días al año.", tipo="barras", estado="observado")
     est = seguro(con, "eea_estaciones", "SELECT * FROM eea_estaciones")
     ultimos = defaultdict(dict)
     for s in seguro(con, "eea_estadisticas", """SELECT estacion, contaminante, anio, valor FROM eea_estadisticas e WHERE agregacion='P1Y'
@@ -477,37 +516,39 @@ def t_ambiente(con, filas):
     if sc:
         ts = max(s["ts"] for s in sc)
         cifra(t, "pm25_ciudadano", r(statistics.median([s["pm25"] for s in sc]), 1), "µg/m³", "PM2.5 ahora · mediana de sensores ciudadanos",
-              "sensor_community", ts, "en_vivo", nota="Promedio de 5 minutos; sensores ópticos de bajo costo (sobreestiman con humedad alta).", decimales=1)
-        cifra(t, "sensores_ciudadanos", len(sc), "sensores", "Sensores ciudadanos de partículas en Budapest", "sensor_community", ts, "en_vivo")
+              "sensor_community", ts, "bajo_costo", nota="Bajo costo: sensores ópticos ciudadanos sin calibración oficial (sobreestiman con humedad alta); promedio de 5 minutos en la instantánea.", decimales=1)
+        cifra(t, "sensores_ciudadanos", len(sc), "sensores", "Sensores ciudadanos de partículas (bajo costo) en Budapest", "sensor_community", ts, "bajo_costo")
     hs = seguro(con, "sc_historico", "SELECT ts, pm25_mediana FROM sc_historico ORDER BY ts")
     if len(hs) > 1:
-        serie(t, "pm25_ciudadano", "PM2.5 ciudadano por instantánea", "µg/m³", "sensor_community", [[h["ts"], h["pm25_mediana"]] for h in hs])
+        serie(t, "pm25_ciudadano", "PM2.5 ciudadano de bajo costo por instantánea", "µg/m³", "sensor_community", [[h["ts"], h["pm25_mediana"]] for h in hs], estado="bajo_costo")
     osem = seguro(con, "osem_sensores", "SELECT COUNT(DISTINCT box_id) cajas, SUM(vigente) vig, MAX(ts) ts FROM osem_sensores")
     if osem and osem[0]["cajas"]:
         cajas_vig = lago.consultar(con, "SELECT COUNT(DISTINCT box_id) n FROM osem_sensores WHERE vigente=1")[0]["n"]
-        cifra(t, "sensebox", cajas_vig, "cajas", "senseBoxes con datos en los últimos 7 días", "opensensemap", (osem[0]["ts"] or "")[:10], "en_vivo",
+        cifra(t, "sensebox", cajas_vig, "cajas", "senseBoxes (bajo costo) con datos en los últimos 7 días", "opensensemap", (osem[0]["ts"] or "")[:10], "bajo_costo",
               nota=f"{osem[0]['cajas']} cajas registradas en el área")
     # CAMS + meteorología
     hor = seguro(con, "meteo_horario", "SELECT * FROM meteo_horario ORDER BY hora")
     if hor:
-        serie(t, "cams_pm25", "PM2.5 modelado CAMS (−2 a +3 días)", "µg/m³", "open_meteo", series=[
+        serie(t, "cams_pm25", "PM2.5 y PM10 · modelo CAMS (−2 a +3 días)", "µg/m³", "open_meteo", estado="modelo", series=[
             {"nombre": "PM2.5", "puntos": [[h["hora"], h["pm25"]] for h in hor if h["pm25"] is not None]},
             {"nombre": "PM10", "puntos": [[h["hora"], h["pm10"]] for h in hor if h["pm10"] is not None]}],
             nota="Copernicus Atmosphere Monitoring Service, dominio Europa (~10 km).")
-        serie(t, "temperatura_horaria", "Temperatura (−2 a +3 días)", "°C", "open_meteo", [[h["hora"], h["temperatura"]] for h in hor])
+        serie(t, "temperatura_horaria", "Temperatura · modelo de pronóstico (−2 a +3 días)", "°C", "open_meteo", [[h["hora"], h["temperatura"]] for h in hor], estado="modelo")
     dia = seguro(con, "meteo_diario", "SELECT substr(fecha,1,4) a, AVG(tmedia) t, SUM(tmax>=30) calor, SUM(tmin>=20) tropical, SUM(precipitacion) p, COUNT(*) n FROM meteo_diario GROUP BY a ORDER BY a")
     completos = [d for d in dia if d["n"] >= 365]
-    serie(t, "temperatura_anual", "Temperatura media anual", "°C", "open_meteo", [[int(d["a"]), r(d["t"], 2)] for d in completos],
+    serie(t, "temperatura_anual", "Temperatura media anual · modelo ERA5", "°C", "open_meteo", [[int(d["a"]), r(d["t"], 2)] for d in completos], estado="modelo",
           nota="Reanálisis ERA5 en el centro de la ciudad.")
-    serie(t, "dias_calor", "Días con máxima ≥ 30 °C", "días", "open_meteo", [[int(d["a"]), d["calor"]] for d in completos], tipo="barras")
+    serie(t, "dias_calor", "Días con máxima ≥ 30 °C · modelo ERA5", "días", "open_meteo", [[int(d["a"]), d["calor"]] for d in completos], tipo="barras", estado="modelo")
     if completos:
         base = [d["t"] for d in completos if 2000 <= int(d["a"]) <= 2009]
         u = completos[-1]
-        cifra(t, "temp_anual", r(u["t"], 1), "°C", "Temperatura media del último año completo", "open_meteo", u["a"], "modelado", decimales=1)
+        nota_modelo = "Modelo: reanálisis ERA5 servido por Open-Meteo, no medición de estación."
+        cifra(t, "temp_anual", r(u["t"], 1), "°C", "Temperatura media del último año completo", "open_meteo", u["a"], "modelo", nota=nota_modelo, decimales=1)
         if base:
-            cifra(t, "anomalia", r(u["t"] - sum(base) / len(base), 2), "°C", "Anomalía frente a 2000–2009", "open_meteo", u["a"], "derivado", decimales=2)
-        cifra(t, "dias_calor", u["calor"], "días", "Días con máxima ≥ 30 °C", "open_meteo", u["a"], "modelado")
-        cifra(t, "noches_tropicales", u["tropical"], "noches", "Noches tropicales (mínima ≥ 20 °C)", "open_meteo", u["a"], "modelado")
+            cifra(t, "anomalia", r(u["t"] - sum(base) / len(base), 2), "°C", "Anomalía frente a 2000–2009", "open_meteo", u["a"], "modelo",
+                  nota="Diferencia calculada sobre el reanálisis ERA5 (modelo).", decimales=2)
+        cifra(t, "dias_calor", u["calor"], "días", "Días con máxima ≥ 30 °C", "open_meteo", u["a"], "modelo", nota=nota_modelo)
+        cifra(t, "noches_tropicales", u["tropical"], "noches", "Noches tropicales (mínima ≥ 20 °C)", "open_meteo", u["a"], "modelo", nota=nota_modelo)
     # Copernicus por distrito
     imp = [f["sellado"] for f in filas if f["sellado"] is not None]
     arb = [f["arbolado"] for f in filas if f["arbolado"] is not None]
@@ -524,7 +565,7 @@ def t_ambiente(con, filas):
 
 
 def t_distritos(filas):
-    t = tema("distritos", "Atlas de los 23 distritos", ["ksh", "osm_overpass", "bkk_gtfs", "bubi", "copernicus", "sensor_community"])
+    t = tema("distritos", "Atlas de los 23 distritos", ["ksh", "osm_overpass", "bkk_gtfs", "copernicus", "sensor_community"])
     t["listas"]["distritos"] = filas
     t["listas"]["metricas"] = [{"id": m[0], "etiqueta": m[1], "unidad": m[2], "fuente": m[3], "estado": m[4], "dimension": m[5],
                                 "sentido": m[6], "formula": m[7]} for m in METRICAS]
@@ -549,6 +590,71 @@ def t_distritos(filas):
     return t
 
 
+def t_preguntas(filas, ambiente, movilidad):
+    """Preguntas de la Entrega 1 (sección 1 del Word): cuáles responde el sistema, con qué cifras, y cuáles quedan pendientes."""
+    t = tema("preguntas", "Preguntas del sistema", ["bkk_gtfs", "osm_overpass", "ksh", "copernicus", "open_meteo", "eea", "sensor_community", "eurostat", "bubi"])
+    n = lambda f: f"{f['romano']}. {f['apodo']}"  # noqa: E731
+    num = lambda v, d=0: f"{v:,.{d}f}".replace(",", " ").replace(".", ",")  # noqa: E731
+    con_dato = lambda k: [f for f in filas if f.get(k) is not None]  # noqa: E731
+
+    peor_mov = sorted(con_dato("score_movilidad"), key=lambda f: f["score_movilidad"])[:3]
+    menos_sal = sorted(con_dato("salidas_1000"), key=lambda f: f["salidas_1000"])[:3]
+    sin_bubi = [f for f in filas if not f["bubi"]]
+    mas_sellado = sorted(con_dato("sellado"), key=lambda f: -f["sellado"])[:3]
+    menos_arbol = sorted(con_dato("arbolado"), key=lambda f: f["arbolado"])[:3]
+    c = ambiente["cifras"]
+    aire = []
+    for clave, cont in (("pm25_anual", "PM2.5"), ("pm10_anual", "PM10"), ("no2_anual", "NO2")):
+        x = c.get(clave)
+        if x:
+            aire.append((cont, x["valor"], x["vigencia"], x["nota"].split(" con cobertura")[0].replace("Promedio de ", "")))
+    cumple_ue = all(v <= config.LIMITE_UE_ANUAL[k] for k, v, *_ in aire)
+    cumple_oms = all(v <= config.OMS_ANUAL[k] for k, v, *_ in aire)
+    calor = c.get("dias_calor")
+
+    t["listas"]["preguntas"] = [
+        {"id": "P1", "estado": "respondida", "seccion": "#atlas",
+         "pregunta": "¿Qué distritos tienen peor acceso a transporte público y a bicicleta por habitante?",
+         "respuesta": (f"Menor puntaje de movilidad: {', '.join(f'{n(f)} ({num(f['score_movilidad'])}/100)' for f in peor_mov)}. "
+                       f"Menos salidas de transporte por cada 1 000 habitantes: {', '.join(f'{n(f)} ({num(f['salidas_1000'])})' for f in menos_sal)}. "
+                       f"{len(sin_bubi)} de los 23 distritos no tienen ninguna estación MOL Bubi: {', '.join(f['romano'] for f in sin_bubi)}."),
+         "limites": ("Mide la oferta programada un miércoles (F05), no el servicio real. La población es la residente (F08): "
+                     "los distritos centrales, con muchos visitantes de día, parecen mejor servidos por habitante de lo que están."),
+         "fuentes": ["bkk_gtfs", "osm_overpass", "ksh"]},
+        {"id": "P2", "estado": "respondida", "seccion": "#ambiente",
+         "pregunta": "¿Qué distritos tienen más suelo sellado y menos arbolado, es decir, más riesgo de isla de calor?",
+         "respuesta": (f"Más suelo sellado: {', '.join(f'{n(f)} ({num(f['sellado'], 1)} %)' for f in mas_sellado)}. "
+                       f"Menos arbolado: {', '.join(f'{n(f)} ({num(f['arbolado'], 1)} %)' for f in menos_arbol)}. "
+                       + (f"Según el modelo ERA5, en {calor['vigencia']} hubo {calor['valor']} días con máximas de 30 °C o más." if calor else "")),
+         "limites": "Las capas de Copernicus son de 2018. La temperatura es de modelo (F14) y de un solo punto de la ciudad, no por distrito.",
+         "fuentes": ["copernicus", "open_meteo"]},
+        {"id": "P3", "estado": "respondida", "seccion": "#ambiente",
+         "pregunta": "¿Cumple Budapest los límites de la UE y las guías de la OMS de calidad del aire?",
+         "respuesta": (("Sí cumple" if cumple_ue else "No cumple") + " los límites anuales de la UE y "
+                       + ("cumple" if cumple_oms else "no cumple") + " las guías de la OMS: "
+                       + "; ".join(f"{k} {num(v, 1)} µg/m³ en {vig} ({est}; UE {config.LIMITE_UE_ANUAL[k]}, OMS {config.OMS_ANUAL[k]})" for k, v, vig, est in aire) + "."),
+         "limites": ("En el último año el PM2.5 oficial sale de muy pocas estaciones. Los sensores ciudadanos (F11, F12) son de bajo costo "
+                     "y la previsión CAMS (F14) es de modelo: ninguno de los dos sirve para verificar el cumplimiento legal."),
+         "fuentes": ["eea", "sensor_community", "open_meteo"]},
+        {"id": "P4", "estado": "pendiente", "seccion": "#movilidad",
+         "pregunta": "¿Qué distritos reciben peor servicio real de transporte (retrasos y cancelaciones)?",
+         "motivo": "El tiempo real de BKK (F16, GTFS-Realtime) exige registro y una clave personal; decidimos no atar el lago a una credencial.",
+         "cambiaria": "Una clave institucional a nombre del grupo, o que BKK publique el GTFS-Realtime sin registro.",
+         "fuentes": ["bkk_gtfs"]},
+        {"id": "P5", "estado": "pendiente", "seccion": "#economia",
+         "pregunta": "¿Qué distrito es más pobre?",
+         "motivo": "Ingreso, pobreza y empleo solo existen para toda la ciudad (F10, NUTS2 y NUTS3); ninguna fuente abierta del lago los da por distrito.",
+         "cambiaria": "Que KSH publique ingresos o datos fiscales por kerület en formato abierto.",
+         "fuentes": ["eurostat"]},
+        {"id": "P6", "estado": "pendiente", "seccion": "#movilidad",
+         "pregunta": "¿Dónde hay bicicletas MOL Bubi disponibles ahora?",
+         "motivo": "El feed del operador (F07) responde pero no publica estaciones: quedó como fuente candidata y solo se conocen las ubicaciones (OSM, F02).",
+         "cambiaria": "Que el operador vuelva a publicar las estaciones: el lago las integra solo en la siguiente ejecución.",
+         "fuentes": ["bubi", "osm_overpass"]},
+    ]
+    return t
+
+
 def t_catalogo(con, estado):
     from pipelines.esquema import ESQUEMA
     t = tema("catalogo", "Fuentes y método", list(config.FUENTES))
@@ -558,7 +664,7 @@ def t_catalogo(con, estado):
         lin = [json.loads(l) for l in p.read_text(encoding="utf-8").splitlines() if l.strip()]
     por_fuente = defaultdict(lambda: {"archivos": 0, "bytes": 0, "ultimo": None})
     for l in lin:
-        x = por_fuente[l["fuente"]]
+        x = por_fuente["ksh_hvd" if l["fuente"] == "ksh" and "/hvd_" in l["archivo"] else l["fuente"]]
         x["archivos"] += 1
         x["bytes"] += l["bytes"] or 0
         x["ultimo"] = max(x["ultimo"] or "", l["ts"])
@@ -567,9 +673,11 @@ def t_catalogo(con, estado):
         n = con.execute(f"SELECT COUNT(*) FROM {nombre}").fetchone()[0] if lago.tabla_existe(con, nombre) else 0
         for fid in [x.strip() for x in meta["fuente"].split("+")]:
             tablas[fid].append({"tabla": nombre, "filas": n})
-    t["listas"]["fuentes"] = [{"id": fid, **{k: f[k] for k in ("nombre", "organismo", "url", "licencia", "acceso", "frecuencia")},
-                               "estado": estado.get(fid, {}).get("estado", "pendiente"), "error": estado.get(fid, {}).get("error"),
-                               "ultima_ingesta": estado.get(fid, {}).get("ultima_ingesta"), "bronze_archivos": por_fuente[fid]["archivos"],
+    t["listas"]["fuentes"] = [{"id": fid, "codigo": f["codigo"], "probada": probada(fid),
+                               **{k: f[k] for k in ("nombre", "organismo", "url", "licencia", "acceso", "frecuencia")},
+                               "estado": estado.get(f.get("modulo", fid), {}).get("estado", "pendiente"),
+                               "error": estado.get(f.get("modulo", fid), {}).get("error"),
+                               "ultima_ingesta": estado.get(f.get("modulo", fid), {}).get("ultima_ingesta"), "bronze_archivos": por_fuente[fid]["archivos"],
                                "bronze_mb": r(por_fuente[fid]["bytes"] / 1e6, 2), "tablas": tablas.get(fid, [])}
                               for fid, f in config.FUENTES.items()]
     t["listas"]["zonas"] = [
@@ -609,13 +717,17 @@ def capas_geo(con, filas):
     lin.sort(key=lambda x: orden.get(x["modo"], 0))
     lago.escribir_json(G / "lineas.geojson", geo.coleccion(
         geo.feature(json.loads(l["geojson"]), {"modo": l["modo"], "linea": l["nombre_corto"], "color": l["color"]}) for l in lin))
+    disp = {x["estacion_id"]: x for x in seguro(con, "bubi_disponibilidad", "SELECT * FROM bubi_disponibilidad")}
     bubi = seguro(con, "bubi_estaciones", "SELECT * FROM bubi_estaciones")
     lago.escribir_json(G / "bubi.geojson", geo.coleccion(
-        geo.punto(b["lon"], b["lat"], {"n": b["nombre"], "b": b["bicis"], "c": b["anclajes"], "d": b["distrito_id"]}) for b in bubi))
-    sens = [geo.punto(s["lon"], s["lat"], {"f": "sensor_community", "id": s["sensor_id"], "pm25": s["pm25"], "pm10": s["pm10"], "t": s["temperatura"], "ts": s["ts"], "d": s["distrito_id"]})
+        geo.punto(b["lon"], b["lat"], {"n": b["nombre"], "b": disp.get(b["estacion_id"], {}).get("bicis"),
+                                       "c": disp.get(b["estacion_id"], {}).get("anclajes"), "o": b["origen"], "d": b["distrito_id"]}) for b in bubi))
+    # Los sensores ciudadanos suelen estar en viviendas: en gold se publican redondeados a 3 decimales (~110 m)
+    # y sin el nombre libre de la caja. La ubicación exacta queda solo en silver (no publicado) para asignar distrito.
+    sens = [geo.punto(s["lon"], s["lat"], {"f": "sensor_community", "id": s["sensor_id"], "pm25": s["pm25"], "pm10": s["pm10"], "t": s["temperatura"], "ts": s["ts"], "d": s["distrito_id"]}, dec=3)
             for s in seguro(con, "sc_sensores", "SELECT * FROM sc_sensores WHERE (pm25 IS NOT NULL OR temperatura IS NOT NULL) AND lat IS NOT NULL")]
     for s in seguro(con, "osem_sensores", "SELECT box_id, box_nombre, lat, lon, distrito_id, MAX(ts) ts, MAX(CASE WHEN fenomeno_norm='pm25' THEN valor END) pm25, MAX(CASE WHEN fenomeno_norm='pm10' THEN valor END) pm10, MAX(CASE WHEN fenomeno_norm='temperatura' THEN valor END) t FROM osem_sensores WHERE vigente=1 AND lat IS NOT NULL GROUP BY box_id"):
-        sens.append(geo.punto(s["lon"], s["lat"], {"f": "opensensemap", "id": s["box_id"], "n": s["box_nombre"], "pm25": s["pm25"], "pm10": s["pm10"], "t": s["t"], "ts": s["ts"], "d": s["distrito_id"]}))
+        sens.append(geo.punto(s["lon"], s["lat"], {"f": "opensensemap", "id": s["box_id"], "pm25": s["pm25"], "pm10": s["pm10"], "t": s["t"], "ts": s["ts"], "d": s["distrito_id"]}, dec=3))
     lago.escribir_json(G / "sensores.geojson", geo.coleccion(sens))
     amb = {e["estacion"]: e for e in seguro(con, "eea_estaciones", "SELECT * FROM eea_estaciones")}
     t_amb = json.loads((T / "ambiente.json").read_text(encoding="utf-8")) if (T / "ambiente.json").exists() else {"listas": {}}
@@ -627,13 +739,18 @@ def capas_geo(con, filas):
 
 
 def publicar(con, estado):
+    ESTADO.clear()
+    ESTADO.update(estado)
     filas = metricas_distrito(con)
     temas = [t_territorio(con, filas, estado), t_demografia(con, filas), t_economia(con, filas), t_turismo(con, filas),
              t_movilidad(con, filas), t_ambiente(con, filas), t_distritos(filas)]
+    por_nombre = {t["tema"]: t for t in temas}
+    temas.append(t_preguntas(filas, por_nombre["ambiente"], por_nombre["movilidad"]))
     for t in temas:
+        completar_fuentes(t)
         lago.escribir_json(T / f"{t['tema']}.json", t)
     capas_geo(con, filas)
-    lago.escribir_json(T / "catalogo.json", t_catalogo(con, estado))
+    lago.escribir_json(T / "catalogo.json", completar_fuentes(t_catalogo(con, estado)))
     # copia privada para el sitio (se sirve solo a través de /api/datos)
     if config.WEB_LAGO.exists():
         shutil.rmtree(config.WEB_LAGO)

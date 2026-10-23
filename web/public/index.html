@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="estilos.css?v=1">
+  <link rel="stylesheet" href="estilos.css?v=5">
 </head>
 <body>
   <!-- Compuerta: la clave se valida en el servidor (/api/entrar) -->
@@ -29,6 +29,7 @@
     <nav id="menu" class="menu" aria-label="Secciones">
       <div class="marca"><span class="punto"></span>CEREBRO<b>BUDAPEST</b></div>
       <a href="#panorama" data-sec="panorama">Panorama</a>
+      <a href="#preguntas" data-sec="preguntas">Preguntas del sistema</a>
       <a href="#gemelo" data-sec="gemelo">Gemelo territorial 3D</a>
       <a href="#gente" data-sec="gente">Gente</a>
       <a href="#economia" data-sec="economia">Economía y vivienda</a>
@@ -73,6 +74,13 @@
         <div id="panoramaTiles" class="tiles"></div>
       </section>
 
+      <section id="preguntas" class="sec">
+        <p class="eyebrow mono">Entrega 1 · sección 1 del documento «Por qué estos datos»</p>
+        <h1>Preguntas del sistema</h1>
+        <p id="preguntasLead" class="lead"></p>
+        <div id="preguntasLista" class="grid2"></div>
+      </section>
+
       <section id="gemelo" class="sec sec-mapa">
         <h1>Gemelo territorial 3D</h1>
         <p class="lead">Explora Budapest por preguntas —movilidad, densidad, servicios, verde o aire— y haz clic en cualquier punto para medir su entorno en 500 m. El mapa combina los límites de los 23 distritos, las paradas y líneas del GTFS de BKK, MOL Bubi, sensores ciudadanos y oficiales, equipamientos OSM, edificios 3D y capas Copernicus.</p>
@@ -80,15 +88,18 @@
           <div id="mapa" class="mapa"></div>
           <nav id="lentes" class="lentes" aria-label="Lentes del mapa"></nav>
           <aside id="mapaPanel" class="mapa-panel">
+            <button id="plegarPanel" class="plegar" type="button" aria-expanded="true" aria-controls="mapaPanelCuerpo">Capas y mapa base</button>
+            <div id="mapaPanelCuerpo">
             <h3>Capas</h3><div id="capas" class="capas"></div>
             <h3>Mapa base</h3><div id="bases" class="bases"></div>
             <h3>Buscar lugar</h3><input id="mapaBuscar" type="search" placeholder="Parada, museo, distrito…"><div id="mapaResultados" class="mapa-resultados"></div>
+            </div>
           </aside>
           <div id="leyenda" class="leyenda"></div>
           <div id="ficha" class="ficha" hidden></div>
           <div id="hud" class="hud mono"></div>
         </div>
-        <p class="notas" id="gemeloNotas">Las salidas de transporte corresponden a un miércoles de referencia del GTFS vigente. Los sensores ciudadanos son una instantánea del momento de ingesta, no una media oficial.</p>
+        <p class="notas" id="gemeloNotas">Las salidas de transporte corresponden a un miércoles de referencia del GTFS vigente. Los sensores ciudadanos son de bajo costo y una instantánea del momento de ingesta, no una media oficial. Las estaciones MOL Bubi provienen de OpenStreetMap porque el feed del operador no publica estaciones.</p>
       </section>
 
       <section id="gente" class="sec"><h1>Gente</h1><p id="genteLead" class="lead"></p><div id="genteTiles" class="tiles"></div><div id="genteGraficos" class="grid2"></div></section>
@@ -139,12 +150,12 @@
   <div id="tip" class="tip" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-  <script src="js/graficos.js?v=1"></script>
-  <script src="js/secciones.js?v=1"></script>
-  <script src="js/diagnostico.js?v=1"></script>
-  <script src="js/atlas.js?v=1"></script>
-  <script src="js/correlaciones.js?v=1"></script>
-  <script src="js/mapa.js?v=1"></script>
-  <script src="js/app.js?v=1"></script>
+  <script src="js/graficos.js?v=5"></script>
+  <script src="js/secciones.js?v=5"></script>
+  <script src="js/diagnostico.js?v=5"></script>
+  <script src="js/atlas.js?v=5"></script>
+  <script src="js/correlaciones.js?v=5"></script>
+  <script src="js/mapa.js?v=5"></script>
+  <script src="js/app.js?v=5"></script>
 </body>
 </html>

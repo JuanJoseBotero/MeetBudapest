@@ -2,7 +2,8 @@
 // Pearson y Spearman sobre casos completos, recta de mínimos cuadrados y pares más asociados. Sin lenguaje causal.
 (function () {
   const $ = s => document.querySelector(s);
-  let D = [], M = {}, pares = [];
+  let D = [], M = {}, pares = [], FU = {};
+  const cod = id => FU[id] ? `${FU[id].codigo} ${FU[id].nombre.replace(/\s*[·(].*$/, '')}, probada ${FU[id].probada}` : id;
 
   function pearson(x, y) {
     const n = x.length, mx = x.reduce((a, b) => a + b, 0) / n, my = y.reduce((a, b) => a + b, 0) / n;
@@ -30,7 +31,7 @@
     $('#corrLectura').innerHTML = `<div class="corr-r">r = ${G.fmt.n(p.r, 2)}</div>
       <p>Asociación <b>${fuerza(p.r)}</b> y ${p.r >= 0 ? 'positiva' : 'negativa'} entre <b>${G.esc(mx.etiqueta.toLowerCase())}</b> y <b>${G.esc(my.etiqueta.toLowerCase())}</b>: los distritos con más de lo primero tienden a tener ${signo} de lo segundo.
       Spearman (por rangos, resistente a extremos): <b class="mono">${G.fmt.n(s, 2)}</b> · n = ${casos.length}.</p>
-      <p class="notas">Puntos ámbar: Buda · cian: Pest y Csepel. Fuentes: ${G.esc(mx.fuente)} (${G.esc(mx.estado)}) y ${G.esc(my.fuente)} (${G.esc(my.estado)}). Con 23 casos, |r| &lt; 0,41 no es distinguible de cero al 5 %. <b>Correlación no implica causalidad.</b></p>`;
+      <p class="notas">Puntos ámbar: Buda · cian: Pest y Csepel. Fuentes: ${G.esc(cod(mx.fuente))} (${G.esc(mx.estado.replace('_', ' '))}) y ${G.esc(cod(my.fuente))} (${G.esc(my.estado.replace('_', ' '))}). Con 23 casos, |r| &lt; 0,41 no es distinguible de cero al 5 %. <b>Correlación no implica causalidad.</b></p>`;
   }
 
   window.CORRELACIONES = {
@@ -38,6 +39,7 @@
       const j = L.distritos; if (!j) return;
       D = j.listas.distritos; pares = j.listas.pares || [];
       M = Object.fromEntries(j.listas.metricas.map(m => [m.id, m]));
+      FU = Object.fromEntries((j.fuentes || []).map(f => [f.id, f]));
       $('#correlacionesLead').innerHTML = `Cruza <b>${j.listas.metricas.length} métricas trazables</b> de los 23 distritos —demografía, vivienda, transporte, servicios, verde, suelo y aire— y calcula Pearson y Spearman sobre casos completos. ` +
         `Sirve para formular preguntas y detectar relaciones que merecen análisis, no para afirmar causas.`;
       const opts = sel => j.listas.metricas.map(m => `<option value="${m.id}" ${m.id === sel ? 'selected' : ''}>${G.esc(m.etiqueta)} (${G.esc(m.unidad)})</option>`).join('');

@@ -35,6 +35,13 @@ CATEGORIAS = {
 }
 
 
+N_DISTRITOS = 23
+
+
+def relaciones(j):
+    return sum(e.get("type") == "relation" for e in j.get("elements", []))
+
+
 def overpass(q, nombre):
     ultimo = None
     for ep in ENDPOINTS:
@@ -52,6 +59,8 @@ def ingestar():
     lago.log(F, "distritos (admin_level=9, out geom)")
     distritos = overpass(f'[out:json][timeout:240];{AREA_BP}rel(area.bp)["boundary"="administrative"]["admin_level"="9"];out geom;',
                          "distritos.json")
+    if relaciones(distritos) != N_DISTRITOS:  # Overpass a veces responde 200 con 0 elementos
+        raise RuntimeError(f"Overpass devolvió {relaciones(distritos)} distritos (se esperaban {N_DISTRITOS}): ingesta rechazada")
     time.sleep(5)
     lago.log(F, "puntos de interés")
     partes = "".join(f'nwr["{k}"~"^({"|".join(v)})$"](area.bp);' for k, v in CATEGORIAS.values())
@@ -75,9 +84,10 @@ def _numero(tags):
 
 
 def silver(con):
-    d, fecha = lago.leer_bronze_json(F, "distritos.json")
+    # Verificación: se usa la ingesta más reciente con los 23 distritos; una vacía no llega a silver
+    d, fecha = lago.leer_bronze_valido(F, "distritos.json", lambda j: relaciones(j) == N_DISTRITOS)
     if not d:
-        raise RuntimeError("sin bronze de distritos")
+        raise RuntimeError("ninguna ingesta de distritos pasa la verificación (23 relaciones)")
     # KSH se ingesta antes que OSM en el orquestador; si falta, los campos oficiales quedan NULL
     hist = (lago.consultar(con, "SELECT * FROM ksh_distritos_historico ORDER BY anio")
             if lago.tabla_existe(con, "ksh_distritos_historico") else [])
@@ -104,11 +114,13 @@ def silver(con):
             "geojson": json.dumps(geo.geojson_mp(mp)),
         })
     filas.sort(key=lambda f: f["distrito_id"])
+    if len(filas) != N_DISTRITOS:
+        raise RuntimeError(f"verificación: {len(filas)} distritos en lugar de {N_DISTRITOS}; no se publica")
     lago.escribir_tabla(con, "distritos", filas)
     lago.log(F, f"silver distritos: {len(filas)}")
 
     asignar = asignador(con)
-    p, _ = lago.leer_bronze_json(F, "poi.json")
+    p, _ = lago.leer_bronze_valido(F, "poi.json", lambda j: len(j.get("elements", [])) > 1000)
     inverso = {}
     for cat, (k, vals) in CATEGORIAS.items():
         for v in vals:
@@ -129,20 +141,37 @@ def silver(con):
             continue
         pois.append({"osm_tipo": e["type"], "osm_id": e["id"], "categoria": cat, "subcategoria": sub,
                      "nombre": t.get("name"), "lat": lat, "lon": lon, "estrellas": lago.num(t.get("stars")),
-                     "wikidata": t.get("wikidata"), "distrito_id": asignar(lon, lat)})
+                     "wikidata": t.get("wikidata"), "red": t.get("network") or t.get("brand"), "distrito_id": asignar(lon, lat)})
     lago.escribir_tabla(con, "osm_poi", pois)
     lago.log(F, f"silver osm_poi: {len(pois)}")
 
-    c, _ = lago.leer_bronze_json(F, "edificios_conteo.json")
-    ids = [(e["id"], _numero(e.get("tags", {}))) for e in d["elements"] if e["type"] == "relation"]
-    cuentas = [int(e["tags"].get("total", 0)) for e in (c or {}).get("elements", []) if e.get("type") == "count"]
+    # El conteo va en el mismo orden que las relaciones de SU ingesta: se busca la ingesta más reciente que tenga
+    # distritos válidos y conteo. Los números de distrito (1–23) son estables, así que puede ser de otra fecha;
+    # fecha_osm deja constancia de cuándo se contó. Si no hay ninguna, se conserva la tabla anterior.
+    base = config.BRONZE / F
     filas_e = []
-    for i, (_, n) in enumerate(ids):
-        if n and 2 * i + 1 < len(cuentas):
-            filas_e.append({"distrito_id": n, "edificios": cuentas[2 * i], "edificios_con_niveles": cuentas[2 * i + 1],
-                            "fecha_osm": (c.get("osm3s") or {}).get("timestamp_osm_base")})
-    lago.escribir_tabla(con, "osm_edificios_distrito", filas_e)
-    lago.log(F, f"silver osm_edificios_distrito: {len(filas_e)}")
+    for f_conteo in sorted((x.name for x in base.iterdir() if x.is_dir()), reverse=True):
+        pd_, pc = base / f_conteo / "distritos.json", base / f_conteo / "edificios_conteo.json"
+        if not (pd_.exists() and pc.exists()):
+            continue
+        dd = json.loads(pd_.read_text(encoding="utf-8"))
+        if relaciones(dd) != N_DISTRITOS:
+            continue
+        c = json.loads(pc.read_text(encoding="utf-8"))
+        ids = [(e["id"], _numero(e.get("tags", {}))) for e in dd["elements"] if e["type"] == "relation"]
+        cuentas = [int(e["tags"].get("total", 0)) for e in c.get("elements", []) if e.get("type") == "count"]
+        for i, (_, n) in enumerate(ids):
+            if n and 2 * i + 1 < len(cuentas):
+                filas_e.append({"distrito_id": n, "edificios": cuentas[2 * i], "edificios_con_niveles": cuentas[2 * i + 1],
+                                "fecha_osm": (c.get("osm3s") or {}).get("timestamp_osm_base")})
+        if len(filas_e) == N_DISTRITOS:
+            break
+        filas_e = []
+    if len(filas_e) == N_DISTRITOS:
+        lago.escribir_tabla(con, "osm_edificios_distrito", filas_e)
+        lago.log(F, f"silver osm_edificios_distrito: {len(filas_e)} (conteo del {f_conteo})")
+    else:
+        lago.log(F, "sin conteo de edificios válido en bronze: se conserva la tabla anterior")
 
 
 def asignador(con):

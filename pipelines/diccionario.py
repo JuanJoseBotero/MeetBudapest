@@ -11,7 +11,8 @@ from pipelines.lib import lago
 ESTADOS = {
     "observado": "Valor publicado o medido por la fuente, sin transformación más allá de filtrado y tipado.",
     "derivado": "Cálculo propio sobre datos observados (tasas, densidades, promedios, índices). La fórmula se documenta.",
-    "modelado": "Salida de un modelo físico (reanálisis ERA5, CAMS) servida por la fuente.",
+    "modelo": "Salida de un modelo, no una medición: reanálisis ERA5, pronóstico de Open-Meteo y calidad del aire CAMS.",
+    "bajo_costo": "Medición de sensores ciudadanos de bajo costo (Sensor.Community, openSenseMap), sin calibración oficial; instantánea en vivo.",
     "en_vivo": "Instantánea del momento de ingesta de una fuente en tiempo real; cambia en cada ejecución.",
     "proxy": "Indicador indirecto de un fenómeno que no se mide directamente.",
 }
@@ -20,8 +21,8 @@ GEO_CAPAS = {
     "distritos.geojson": ("MultiPolygon", "23 distritos simplificados (~13 m) con todas las métricas del atlas y score_<dimensión> 0–100", "distritos + métricas gold"),
     "paradas.geojson": ("Point", "n nombre · s salidas día ref. · r rutas · m modos · d distrito", "gtfs_paradas"),
     "lineas.geojson": ("LineString", "modo · linea · color", "gtfs_lineas_geom"),
-    "bubi.geojson": ("Point", "n nombre · b bicicletas · c anclajes · d distrito", "bubi_estaciones"),
-    "sensores.geojson": ("Point", "f fuente (sensor_community|opensensemap) · id · pm25 · pm10 · t temperatura · ts · d distrito", "sc_sensores + osem_sensores"),
+    "bubi.geojson": ("Point", "n nombre · b bicicletas y c anclajes (solo si F07 está integrada) · o origen (osm | nextbike_vivo) · d distrito", "bubi_estaciones + bubi_disponibilidad"),
+    "sensores.geojson": ("Point", "f fuente (sensor_community|opensensemap) · id · pm25 · pm10 · t temperatura · ts · d distrito. Coordenadas redondeadas a 3 decimales (~110 m) y sin nombre de caja para no exponer viviendas", "sc_sensores + osem_sensores"),
     "eea.geojson": ("Point", "estacion · nombre · tipo · area · PM25 · PM10 · NO2 · O3 (último año) · anio", "eea_estaciones + eea_estadisticas"),
     "poi.geojson": ("Point", "c categoría · s subcategoría OSM · n nombre · d distrito", "osm_poi"),
 }

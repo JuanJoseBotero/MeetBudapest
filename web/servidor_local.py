@@ -104,7 +104,8 @@ class Manejador(http.server.SimpleHTTPRequestHandler):
         self.send_error(404)
 
     def log_message(self, fmt, *args):
-        if "/api/" in (args[0] if args else ""):
+        # args[0] es la línea de la petición en los accesos, pero un código (int) en send_error: se pasa a texto
+        if "/api/" in str(args[0] if args else ""):
             super().log_message(fmt, *args)
 
 

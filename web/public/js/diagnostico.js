@@ -8,7 +8,7 @@
     habitabilidad: { nombre: 'Habitabilidad', pesos: { movilidad: 1, servicios: 2, verde: 3, vivienda: .5, ambiente: 2 } },
     densificacion: { nombre: 'Densificación', pesos: { movilidad: 2, servicios: 1, verde: .5, vivienda: 4, ambiente: .5 } },
   };
-  let D = [], dims = [], metricas = {}, perfil = 'equilibrio';
+  let D = [], dims = [], metricas = {}, perfil = 'equilibrio', PROC = '';
 
   const nombre = d => `${d.romano}. ${d.apodo}`;
   const puntaje = (d, p) => {
@@ -45,7 +45,8 @@
         (${Math.round(puntaje(a, perfil))}/100). Su fortaleza relativa es <b>${G.esc(fuerte.nombre.toLowerCase())}</b> y su punto débil, <b>${G.esc(debil.nombre.toLowerCase())}</b>.
         Frente a ${G.esc(nombre(b))} (puesto ${pb}) está ${Math.abs(dif) < 3 ? '<b>prácticamente empatado</b>' : `<b>${Math.round(Math.abs(dif))} puntos ${dif > 0 ? 'por encima' : 'por debajo'}</b>`}. ${robusto}</p>
         <p class="notas">Puntajes 0–100 normalizados entre los 23 distritos (línea gris = mediana). <span style="color:var(--acento)">■</span> ${G.esc(a.romano)} · <span style="color:var(--danubio)">■</span> ${G.esc(b.romano)}.
-        «Aire» usa sensores ciudadanos en vivo y puede faltar en distritos sin sensores.</p>
+        «Aire» usa sensores ciudadanos de bajo costo (instantánea) y puede faltar en distritos sin sensores.
+        Fuentes: ${PROC}.</p>
       </div>
       <div>${dims.map(x => fila(x, a, b)).join('')}
         <div class="diag-ranking"><h3 style="margin-top:14px">Ranking · ${PERFILES[perfil].nombre}</h3><ol>${rk.map(d => `<li class="${d === a ? 'a' : d === b ? 'b' : ''}">${G.esc(nombre(d))} <span class="mono">${Math.round(puntaje(d, perfil))}</span></li>`).join('')}</ol></div>
@@ -56,6 +57,8 @@
     init(L) {
       const j = L.distritos; if (!j) return;
       D = j.listas.distritos; dims = j.listas.dimensiones;
+      PROC = G.esc((j.fuentes || []).filter(f => f.id !== 'lago').map(f => `${f.codigo} ${f.nombre.replace(/\s*[·(].*$/, '')}`).join(', ')
+        + ` · probadas ${[...new Set((j.fuentes || []).filter(f => f.id !== 'lago').map(f => f.probada))].join(', ')}`);
       metricas = Object.fromEntries(j.listas.metricas.map(m => [m.id, m]));
       const opts = sel => D.map(d => `<option value="${d.distrito_id}" ${d.distrito_id === sel ? 'selected' : ''}>${G.esc(nombre(d))}</option>`).join('');
       $('#diagA').innerHTML = opts(5); $('#diagB').innerHTML = opts(11);

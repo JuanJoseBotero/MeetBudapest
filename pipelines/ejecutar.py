@@ -46,8 +46,8 @@ def main(argv=None):
                 lago.log(fid, "ingesta → bronze")
                 e["ingesta"] = mod.ingestar()
                 e["ultima_ingesta"] = lago.ahora()
-            mod.silver(con)
-            e.update(estado="ok", error=None, ultima_silver=lago.ahora())
+            # silver() puede devolver "candidata": la fuente responde pero aún no aporta datos utilizables al lago
+            e.update(estado=mod.silver(con) or "ok", error=None, ultima_silver=lago.ahora())
         except Exception as ex:  # noqa: BLE001 - una fuente caída no detiene el lago
             traceback.print_exc()
             e.update(estado="error", error=f"{type(ex).__name__}: {ex}"[:400], ultimo_intento=lago.ahora())

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exploración · Observable Plot</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; padding: 12px 16px; font: 14px/1.5 system-ui, sans-serif; background: #0a1016; color: #e6edf3; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    h2 { font-size: 14px; margin: 18px 0 6px; color: #a9b7c4; }
+    figure { margin: 0; }
+    #medidas { font: 12px ui-monospace, monospace; color: #a9b7c4; white-space: pre-wrap; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <h1>Prueba de herramienta: Observable Plot</h1>
+  <div>Mismos datos que el sitio: serie de PM2.5/PM10 (F13), salidas de transporte por 1 000 habitantes (F05/F08) y coropleta de arbolado (F04).</div>
+  <h2>1 · PM10 y PM2.5, media anual de estaciones oficiales (F13)</h2><div id="g1"></div>
+  <h2>2 · Salidas de transporte por 1 000 habitantes (F05, F08)</h2><div id="g2"></div>
+  <h2>3 · Cobertura arbórea por distrito (F04)</h2><div id="g3"></div>
+  <div id="medidas">midiendo…</div>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@observablehq/plot@0.6"></script>
+  <script>
+    // Prototipo de exploración: no forma parte del sitio. Mide qué resuelve Observable Plot con los datos del lago.
+    const R = window.RESULTADO = { herramienta: 'Observable Plot ' + (Plot.version || '0.6'), licencia: 'ISC (d3: ISC)' };
+    const t0 = performance.now();
+    const datos = f => fetch('/api/datos?f=' + encodeURIComponent(f), { credentials: 'same-origin' }).then(r => { if (!r.ok) throw new Error(f + ' ' + r.status); return r.json(); });
+    (async () => {
+      const [amb, dis, gj] = await Promise.all([datos('temas/ambiente.json'), datos('temas/distritos.json'), datos('geo/distritos.geojson')]);
+      R.ms_descarga = Math.round(performance.now() - t0);
+      const t1 = performance.now();
+      const filas = amb.series.particulas.series.flatMap(s => s.puntos.map(([anio, v]) => ({ anio, v, contaminante: s.nombre })));
+      document.getElementById('g1').append(Plot.plot({ width: 640, height: 240, y: { label: 'µg/m³', grid: true }, x: { tickFormat: 'd', label: null }, color: { legend: true },
+        marks: [Plot.ruleY([5, 15], { stroke: '#e5664f', strokeDasharray: '4 3' }), Plot.line(filas, { x: 'anio', y: 'v', stroke: 'contaminante', tip: true })] }));
+      const d = dis.listas.distritos.filter(x => x.salidas_1000 != null);
+      document.getElementById('g2').append(Plot.plot({ width: 640, height: 420, marginLeft: 70, x: { label: 'salidas/día por 1 000 hab.', grid: true }, y: { label: null },
+        marks: [Plot.barX(d, { y: x => x.romano, x: 'salidas_1000', sort: { y: 'x' }, fill: '#3fb8c9', tip: true })] }));
+      document.getElementById('g3').append(Plot.plot({ width: 640, projection: { type: 'mercator', domain: gj }, color: { legend: true, label: 'arbolado %', scheme: 'greens' },
+        marks: [Plot.geo(gj, { fill: f => f.properties.arbolado, stroke: '#0a1016', tip: true, title: f => `${f.properties.romano}: ${f.properties.arbolado} %` })] }));
+      R.ms_render = Math.round(performance.now() - t1);
+      R.graficos = 3; R.svg = document.querySelectorAll('svg').length;
+      R.zoom_y_desplazamiento = false;  // Plot genera SVG estático: sin mapa base, zoom ni capas
+      document.getElementById('medidas').textContent = JSON.stringify(R, null, 1);
+    })().catch(e => { R.error = String(e); document.getElementById('medidas').textContent = 'Error: ' + e; });
+  </script>
+</body>
+</html>

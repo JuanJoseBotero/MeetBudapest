@@ -1,6 +1,7 @@
 // Atlas de los 23 distritos: índice compuesto con pesos ajustables por dimensión, coropleta SVG y tabla ordenable.
 (function () {
   const $ = s => document.querySelector(s);
+  let FUENTES = [], PROBADO = '';
   let D = [], dims = [], metricas = [], gj = null, pesos = {}, vista = 'indice', orden = { k: 'indice', desc: true };
 
   function indice(d) {
@@ -35,6 +36,10 @@
       { k: 'poblacion', t: 'Población', n: true }, { k: 'densidad', t: 'hab/km²', n: true }];
     const cont = $('#atlasTabla'); cont.innerHTML = '';
     const t = G.tabla(cont, cols, filas);
+    const pie = document.createElement('div'); pie.className = 'fuente';
+    pie.textContent = 'Fuentes de las métricas: ' + FUENTES.map(f => `${f.codigo} ${f.nombre.replace(/\s*[·(].*$/, '')}`).join(', ')
+      + ` · probadas ${[...new Set(FUENTES.map(f => f.probada))].join(', ')} · cálculo del lago ${PROBADO}`;
+    cont.appendChild(pie);
     t.style.maxHeight = 'none';
     t.querySelectorAll('th').forEach((th, i) => {
       const k = cols[i].k; if (k === 'pos') return; th.style.cursor = 'pointer'; th.title = 'Ordenar';
@@ -47,6 +52,7 @@
     async init(L) {
       const j = L.distritos; if (!j) return;
       D = j.listas.distritos; dims = j.listas.dimensiones; metricas = j.listas.metricas;
+      FUENTES = (j.fuentes || []).filter(f => f.id !== 'lago'); PROBADO = j.probado;
       dims.forEach(x => { pesos[x.id] = x.id === 'ambiente' ? 0.5 : 1; });
       $('#atlasLead').innerHTML = `Índice compuesto de <b>${dims.length} dimensiones</b> construidas con <b>${metricas.filter(m => m.dimension).length} métricas</b>. Cada métrica se normaliza min–max 0–100 entre los 23 distritos (invertida cuando menos es mejor, como el suelo sellado o el PM2.5); cada dimensión promedia sus métricas y el índice pondera las dimensiones con tus pesos. ` +
         `Haz clic en un distrito del mapa para llevarlo al diagnóstico. <b>No es un ranking oficial</b>: es una herramienta para ver cómo cambian las conclusiones al cambiar lo que se valora.`;

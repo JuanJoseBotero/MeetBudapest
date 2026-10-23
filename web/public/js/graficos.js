@@ -37,15 +37,31 @@
   }
 
   // ---------------------------------------------------------------- tile y tarjeta
+  // Tile con procedencia a un clic: siempre muestra el ID de la fuente; al pulsarlo (o Enter/Espacio) despliega
+  // fuente con enlace, vigencia, fecha en que se probó la fuente, estado, licencia y nota.
   function tile(cont, o) {
-    const d = document.createElement('div'); d.className = 'tile'; if (o.title) d.title = o.title;
+    const d = document.createElement('div'); d.className = 'tile';
+    d.tabIndex = 0; d.setAttribute('role', 'button'); d.setAttribute('aria-expanded', 'false');
+    d.setAttribute('aria-label', `${o.etiqueta}: ${o.valor} ${o.unidad || ''}. Ver procedencia`);
+    const p = o.proc || {};
     d.innerHTML = `<div class="v">${esc(o.valor)}${o.unidad ? `<small>${esc(o.unidad)}</small>` : ''}</div><div class="l">${esc(o.etiqueta)}</div>
-      <div class="f">${o.estado ? `<span class="estado-tag estado-${esc(o.estado)}">${esc(o.estado.replace('_', ' '))}</span>` : ''}<span>${esc(o.fuente || '')}</span>${o.vigencia ? `<span>· ${esc(o.vigencia)}</span>` : ''}</div>`;
+      <div class="f">${o.estado ? `<span class="estado-tag estado-${esc(o.estado)}">${esc(o.estado.replace('_', ' '))}</span>` : ''}${p.codigo ? `<b class="fid">${esc(p.codigo)}</b>` : ''}<span>${esc(o.fuente || '')}</span>${o.vigencia ? `<span>· ${esc(o.vigencia)}</span>` : ''}<span class="mas" aria-hidden="true">ⓘ</span></div>
+      <div class="proc" hidden><dl>
+        <dt>Fuente</dt><dd>${p.codigo ? `<b>${esc(p.codigo)}</b> · ` : ''}${p.url ? `<a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.nombre || o.fuente)}</a>` : esc(p.nombre || o.fuente || '—')}</dd>
+        <dt>Vigencia</dt><dd>${esc(o.vigencia || '—')}</dd>
+        <dt>Probada</dt><dd>${esc(p.probada || '—')}</dd>
+        <dt>Estado</dt><dd>${esc((o.estado || '—').replace('_', ' '))}</dd>
+        ${p.licencia ? `<dt>Licencia</dt><dd>${esc(p.licencia)}</dd>` : ''}</dl>${o.title ? `<p>${esc(o.title)}</p>` : ''}</div>`;
+    const alternar = () => { const pr = d.querySelector('.proc'); pr.hidden = !pr.hidden; d.classList.toggle('abierta', !pr.hidden); d.setAttribute('aria-expanded', String(!pr.hidden)); };
+    d.addEventListener('click', e => { if (!e.target.closest('a')) alternar(); });
+    d.addEventListener('keydown', e => { if (e.target === d && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); alternar(); } });
     cont.appendChild(d); return d;
   }
   function card(cont, titulo, sub, opts) {
     const c = document.createElement('article'); c.className = 'card' + (opts && opts.ancha ? ' ancha' : '');
-    c.innerHTML = `<header><h3>${esc(titulo)}</h3><small>${esc(sub || '')}</small></header><div class="cuerpo"></div>`;
+    // opts.estado marca la naturaleza del dato del gráfico (observado, modelo, bajo_costo…) igual que en los tiles
+    const marca = opts && opts.estado ? ` <span class="estado-tag estado-${esc(opts.estado)}">${esc(opts.estado.replace('_', ' '))}</span>` : '';
+    c.innerHTML = `<header><h3>${esc(titulo)}${marca}</h3><small>${esc(sub || '')}</small></header><div class="cuerpo"></div>`;
     cont.appendChild(c);
     return {
       el: c, cuerpo: c.querySelector('.cuerpo'),

@@ -1,7 +1,7 @@
 // Arranque: compuerta (validada en servidor), carga de los temas gold vía /api/datos, navegación, buscador, reloj y clima.
 (function () {
   const $ = s => document.querySelector(s);
-  const TEMAS = ['territorio', 'demografia', 'economia', 'turismo', 'movilidad', 'ambiente', 'distritos', 'catalogo'];
+  const TEMAS = ['territorio', 'demografia', 'economia', 'turismo', 'movilidad', 'ambiente', 'distritos', 'preguntas', 'catalogo'];
   window.LAGO = {};
 
   async function datos(ruta) {
@@ -100,8 +100,8 @@
     try {
       const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=47.4979&longitude=19.0402&current=temperature_2m,relative_humidity_2m,wind_speed_10m&timezone=Europe%2FBudapest');
       const c = (await r.json()).current;
-      $('#clima').textContent = `${Math.round(c.temperature_2m)} °C · ${c.relative_humidity_2m} % HR · ${Math.round(c.wind_speed_10m)} km/h`;
-      $('#clima').title = 'Open-Meteo en vivo · ' + c.time;
+      $('#clima').textContent = `${Math.round(c.temperature_2m)} °C · ${c.relative_humidity_2m} % HR · ${Math.round(c.wind_speed_10m)} km/h · modelo F14`;
+      $('#clima').title = 'F14 Open-Meteo · modelo de pronóstico (no es una estación) · consultado en vivo: ' + c.time;
     } catch (_) { /* sin clima en vivo: el resto del sitio no depende de él */ }
   }
 })();

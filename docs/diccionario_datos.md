@@ -15,7 +15,8 @@ Generado automáticamente el 2026-10-22 por `pipelines/diccionario.py` a partir 
 |---|---|
 | observado | Valor publicado o medido por la fuente, sin transformación más allá de filtrado y tipado. |
 | derivado | Cálculo propio sobre datos observados (tasas, densidades, promedios, índices). La fórmula se documenta. |
-| modelado | Salida de un modelo físico (reanálisis ERA5, CAMS) servida por la fuente. |
+| modelo | Salida de un modelo, no una medición: reanálisis ERA5, pronóstico de Open-Meteo y calidad del aire CAMS. |
+| bajo_costo | Medición de sensores ciudadanos de bajo costo (Sensor.Community, openSenseMap), sin calibración oficial; instantánea en vivo. |
 | en_vivo | Instantánea del momento de ingesta de una fuente en tiempo real; cambia en cada ejecución. |
 | proxy | Indicador indirecto de un fenómeno que no se mide directamente. |
 
@@ -23,18 +24,19 @@ Generado automáticamente el 2026-10-22 por `pipelines/diccionario.py` a partir 
 
 | id | fuente | organismo | acceso | licencia | frecuencia | URL |
 |---|---|---|---|---|---|---|
-| osm_overpass | OpenStreetMap vía Overpass API | OpenStreetMap contributors | API pública (consulta Overpass QL) | ODbL 1.0 | semanal | https://overpass-turbo.eu/ |
-| geofabrik | Geofabrik · extracto OSM de Hungría | Geofabrik GmbH | Descarga directa (.poly, state.txt; .osm.pbf opcional con --pbf) | ODbL 1.0 | diaria (réplica) | https://download.geofabrik.de/europe/hungary.html |
-| copernicus | Copernicus Land Monitoring Service · HRL 2018 | EEA / Copernicus | ArcGIS ImageServer · computeStatisticsHistograms por polígono | Copernicus data policy (acceso libre y completo) | trienal (producto 2018) | https://land.copernicus.eu/ |
-| bkk_gtfs | BKK · GTFS estático de Budapest | Budapesti Közlekedési Központ (BKK) | Descarga directa ZIP (GTFS-RT requiere clave: no usado) | Licencia de datos abiertos BKK | diaria | https://opendata.bkk.hu/ |
-| mobilitydb | Mobility Database · catálogo de feeds | MobilityData | CSV público del catálogo; espejo del GTFS en files.mobilitydatabase.org | CC0 (catálogo) | diaria | https://mobilitydatabase.org/feeds/gtfs/tfs-42 |
-| bubi | MOL Bubi · estaciones de bicicleta pública (nextbike) | BKK / nextbike | JSON en vivo del operador (dominio bh) | Datos públicos del operador (uso informativo) | en vivo (instantánea por ejecución) | https://bubi.freewb.hu/ |
-| ksh | KSH · Oficina Central de Estadística de Hungría | Központi Statisztikai Hivatal | API HVD (SDMX-CSV) + Helységnévtár (XLSX) | Reutilización libre citando la fuente (KSH) | anual | https://www.ksh.hu/?lang=en |
-| eurostat | Eurostat · base de datos | Comisión Europea | API JSON-stat 2.0 | CC BY 4.0 | anual / trimestral | https://ec.europa.eu/eurostat/web/main/data/database |
-| sensor_community | Sensor.Community · red ciudadana de calidad del aire | Sensor.Community (OK Lab Stuttgart) | API pública (promedio 5 min) | ODbL 1.0 | en vivo (instantánea por ejecución) | https://sensor.community/en/ |
-| opensensemap | openSenseMap · senseBoxes | Reedu GmbH / Universität Münster | API pública REST | PDDL 1.0 | en vivo (instantánea por ejecución) | https://opensensemap.org/ |
-| eea | EEA · Air Quality e-Reporting (AQ statistics) | Agencia Europea de Medio Ambiente | DiscoData SQL (AirQualityDataFlows.latest.AirQualityStatistics) | CC BY 4.0 | anual (E1a validado) + año en curso (E2a) | https://www.eea.europa.eu/data-and-maps/data/aqereporting-9 |
-| open_meteo | Open-Meteo · clima, histórico y calidad del aire CAMS | Open-Meteo.com | API pública JSON | CC BY 4.0 | horaria / diaria | https://open-meteo.com/ |
+| osm_overpass | OpenStreetMap vía Overpass API | OpenStreetMap contributors | API pública (consulta Overpass QL) | Open Data Commons Open Database License (ODbL) | semanal | https://overpass-turbo.eu/ |
+| geofabrik | Geofabrik · extracto OSM de Hungría | Geofabrik GmbH | Descarga directa (.poly, state.txt; .osm.pbf opcional con --pbf) | Open Data Commons Open Database License (ODbL) (datos de OpenStreetMap) | diaria (réplica) | https://download.geofabrik.de/europe/hungary.html |
+| copernicus | Copernicus Land Monitoring Service · HRL 2018 | EEA / Copernicus | ArcGIS ImageServer · computeStatisticsHistograms por polígono | Full, open and free access (Reglamento Delegado (UE) 1159/2013) | trienal (producto 2018) | https://land.copernicus.eu/ |
+| bkk_gtfs | BKK · GTFS estático de Budapest | Budapesti Közlekedési Központ (BKK) | Descarga directa ZIP (GTFS-RT requiere clave: no usado) | CC BY 4.0 («Data source: BKK Zrt., CC BY 4.0») | diaria | https://opendata.bkk.hu/ |
+| mobilitydb | Mobility Database · catálogo de feeds | MobilityData | CSV público del catálogo; espejo del GTFS en files.mobilitydatabase.org | Apache License 2.0 (catálogo mobility-database-catalogs) | diaria | https://mobilitydatabase.org/feeds/gtfs/tfs-42 |
+| bubi | MOL Bubi · feed del operador nextbike (candidata: no publica estaciones) | BKK / nextbike | JSON en vivo del operador (dominio bh) | no declara | en vivo (instantánea por ejecución) | https://bubi.freewb.hu/ |
+| ksh | KSH · Helységnévtár (población, superficie y viviendas por distrito) | Központi Statisztikai Hivatal | Descarga directa (XLSX, una edición por año) | no declara | anual | https://www.ksh.hu/?lang=en |
+| ksh_hvd | KSH · conjuntos de datos de alto valor (HVD) | Központi Statisztikai Hivatal | API sin llave (SDMX-CSV) | CC BY 4.0 (declarada en el RDF de los datasets HVD) | anual | https://data.ksh.hu/openapi/ |
+| eurostat | Eurostat · base de datos | Comisión Europea | API JSON-stat 2.0 | Creative Commons Attribution 4.0 International licence | anual / trimestral | https://ec.europa.eu/eurostat/web/main/data/database |
+| sensor_community | Sensor.Community · red ciudadana de sensores de bajo costo | Sensor.Community (OK Lab Stuttgart) | API pública (promedio 5 min) | Open Data Commons DbCL 1.0 (DB Contents License) | en vivo (instantánea por ejecución) | https://sensor.community/en/ |
+| opensensemap | openSenseMap · senseBoxes ciudadanas de bajo costo | Reedu GmbH / Universität Münster | API pública REST | Public Domain Dedication and License 1.0 (PDDL) | en vivo (instantánea por ejecución) | https://opensensemap.org/ |
+| eea | EEA · Air Quality e-Reporting (AQ statistics) | Agencia Europea de Medio Ambiente | DiscoData SQL (AirQualityDataFlows.latest.AirQualityStatistics) | Reutilización libre y gratuita, citando siempre a la EEA como fuente (aviso legal de la EEA) | anual (E1a validado) + año en curso (E2a) | https://www.eea.europa.eu/data-and-maps/data/aqereporting-9 |
+| open_meteo | Open-Meteo · modelos: reanálisis ERA5, pronóstico y calidad del aire CAMS | Open-Meteo.com | API pública JSON | Attribution 4.0 International (CC BY 4.0) | horaria / diaria | https://open-meteo.com/ |
 
 ## 3. Bronze · archivos crudos
 
@@ -265,7 +267,7 @@ Unidad territorial base. Límites OSM (admin_level=9) unidos con el Helységnév
 | centro_lon | REAL | grados | Longitud del centroide |
 | geojson | TEXT | GeoJSON | Geometría MultiPolygon completa (WGS84) |
 
-### `osm_poi` · 16.970 filas
+### `osm_poi` · 16.799 filas
 
 Equipamientos, servicios, turismo y verde de OpenStreetMap clasificados en categorías del sitio.  
 **Fuente:** `osm_overpass` · **Grano:** 1 fila por elemento OSM (nodo o centroide de vía/relación)
@@ -281,6 +283,7 @@ Equipamientos, servicios, turismo y verde de OpenStreetMap clasificados en categ
 | lon | REAL | grados | Longitud |
 | estrellas | REAL |  | Etiqueta stars (alojamiento) |
 | wikidata | TEXT |  | Etiqueta wikidata |
+| red | TEXT |  | Etiqueta network (o brand si falta): red u operador, p. ej. «MOL Bubi» |
 | distrito_id | INTEGER | 1–23 | Número de kerület (distrito) de Budapest asignado por punto-en-polígono con los límites OSM; NULL si cae fuera |
 
 ### `osm_edificios_distrito` · 23 filas
@@ -407,29 +410,38 @@ Registro de feeds GTFS / GTFS-RT de Budapest en Mobility Database (BKK = mdb-990
 | bbox | TEXT |  | min_lat,max_lat,min_lon,max_lon |
 | extraido | TEXT | fecha | bounding_box.extracted_on |
 
-### `bubi_estaciones` · 228 filas
+### `bubi_estaciones` · 222 filas
 
-Estaciones MOL Bubi con disponibilidad en el momento de la ingesta.  
-**Fuente:** `bubi` · **Grano:** 1 fila por estación en la última instantánea
+Ubicación de las estaciones MOL Bubi. Mientras el feed del operador (bubi, F07) no publique estaciones, salen de OSM: amenity=bicycle_rental con red MOL Bubi (origen = osm).  
+**Fuente:** `osm_overpass + bubi` · **Grano:** 1 fila por estación
+
+| columna | tipo | unidad | descripción |
+|---|---|---|---|
+| estacion_id | INTEGER |  | Id OSM de la estación (o uid nextbike si el feed vuelve a publicarlas) |
+| nombre | TEXT |  | Nombre |
+| lat | REAL | grados |  |
+| lon | REAL | grados |  |
+| origen | TEXT |  | osm (OSM, red MOL Bubi) \| nextbike_vivo (feed del operador) |
+| distrito_id | INTEGER | 1–23 | Número de kerület (distrito) de Budapest asignado por punto-en-polígono con los límites OSM; NULL si cae fuera |
+
+### `bubi_disponibilidad` · 0 filas
+
+Bicicletas y anclajes por estación según el feed del operador. Hoy no existe: el feed no publica estaciones y la fuente es candidata.  
+**Fuente:** `bubi` · **Grano:** 1 fila por estación en la última instantánea (solo si el feed publica estaciones)
 
 | columna | tipo | unidad | descripción |
 |---|---|---|---|
 | estacion_id | INTEGER |  | uid nextbike |
 | numero | TEXT |  | Número de estación |
-| nombre | TEXT |  | Nombre |
-| lat | REAL | grados |  |
-| lon | REAL | grados |  |
 | bicis | INTEGER | bicicletas | Bicicletas disponibles |
 | anclajes | INTEGER | anclajes | bike_racks (capacidad) |
 | anclajes_libres | INTEGER | anclajes | free_racks |
 | ts | TEXT | ISO 8601 | Hora de la instantánea |
-| origen | TEXT |  | nextbike_vivo (feed del operador con disponibilidad) \| osm (respaldo: amenity=bicycle_rental de OSM, sin disponibilidad) |
-| distrito_id | INTEGER | 1–23 | Número de kerület (distrito) de Budapest asignado por punto-en-polígono con los límites OSM; NULL si cae fuera |
 
-### `bubi_historico` · 3 filas
+### `bubi_historico` · 0 filas
 
-Serie de instantáneas agregadas del sistema MOL Bubi.  
-**Fuente:** `bubi` · **Grano:** 1 fila por ejecución (se acumula)
+Serie de instantáneas agregadas del sistema MOL Bubi. Solo se escribe cuando la fuente está integrada.  
+**Fuente:** `bubi` · **Grano:** 1 fila por ejecución en que el feed publica estaciones (se acumula)
 
 | columna | tipo | unidad | descripción |
 |---|---|---|---|
@@ -442,7 +454,7 @@ Serie de instantáneas agregadas del sistema MOL Bubi.
 ### `ksh_hvd` · 11.436 filas
 
 Series HVD de KSH (SDMX-CSV) filtradas a Hungría (HU), Budapest NUTS2 (HU11) y NUTS3 (HU110).  
-**Fuente:** `ksh` · **Grano:** 1 fila por dataset × indicador × geo × año × sexo × edad
+**Fuente:** `ksh_hvd` · **Grano:** 1 fila por dataset × indicador × geo × año × sexo × edad
 
 | columna | tipo | unidad | descripción |
 |---|---|---|---|
@@ -520,7 +532,7 @@ Estadísticas anuales oficiales (E1a validado; E2a para el año en curso).
 
 ### `sc_sensores` · 188 filas
 
-Promedio de 5 minutos de sensores ciudadanos en un radio de 20 km del centro (solo exteriores).  
+BAJO COSTO · Promedio de 5 minutos de sensores ciudadanos ópticos de bajo costo (sin calibración oficial) en un radio de 20 km del centro (solo exteriores).  
 **Fuente:** `sensor_community` · **Grano:** 1 fila por sensor en la instantánea
 
 | columna | tipo | unidad | descripción |
@@ -539,7 +551,7 @@ Promedio de 5 minutos de sensores ciudadanos en un radio de 20 km del centro (so
 
 ### `sc_historico` · 3 filas
 
-Mediana urbana de PM2.5/PM10 de sensores ciudadanos en cada instantánea.  
+BAJO COSTO · Mediana urbana de PM2.5/PM10 de sensores ciudadanos de bajo costo en cada instantánea.  
 **Fuente:** `sensor_community` · **Grano:** 1 fila por ejecución (se acumula)
 
 | columna | tipo | unidad | descripción |
@@ -551,7 +563,7 @@ Mediana urbana de PM2.5/PM10 de sensores ciudadanos en cada instantánea.
 
 ### `osem_sensores` · 1.006 filas
 
-Último valor de cada sensor de las senseBoxes exteriores de Budapest.  
+BAJO COSTO · Último valor de cada sensor de las senseBoxes exteriores de Budapest (sensores ciudadanos de bajo costo).  
 **Fuente:** `opensensemap` · **Grano:** 1 fila por sensor de senseBox dentro del bbox
 
 | columna | tipo | unidad | descripción |
@@ -572,7 +584,7 @@ Mediana urbana de PM2.5/PM10 de sensores ciudadanos en cada instantánea.
 
 ### `meteo_diario` · 9.791 filas
 
-Reanálisis ERA5 vía Open-Meteo Archive en el centro de Budapest.  
+MODELO · Reanálisis ERA5 (salida de modelo, no medición) vía Open-Meteo Archive en el centro de Budapest.  
 **Fuente:** `open_meteo` · **Grano:** 1 fila por día (desde 2000-01-01)
 
 | columna | tipo | unidad | descripción |
@@ -585,7 +597,7 @@ Reanálisis ERA5 vía Open-Meteo Archive en el centro de Budapest.
 
 ### `meteo_horario` · 120 filas
 
-Pronóstico y observación reciente horaria + calidad del aire modelada CAMS Europa.  
+MODELO · Pronóstico horario de Open-Meteo y calidad del aire del modelo CAMS Europa (~10 km); nada de esta tabla es medición.  
 **Fuente:** `open_meteo` · **Grano:** 1 fila por hora (−2 a +3 días)
 
 | columna | tipo | unidad | descripción |
@@ -611,17 +623,17 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 
 | clave | etiqueta | unidad | fuente | estado | vigencia | nota |
 |---|---|---|---|---|---|---|
-| pm25_anual | PM2.5 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2026 | Guía OMS 2021: 5 µg/m³ · límite UE: 25 µg/m³ |
-| pm10_anual | PM10 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2026 | Guía OMS 2021: 15 µg/m³ · límite UE: 40 µg/m³ |
-| no2_anual | NO2 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2026 | Guía OMS 2021: 10 µg/m³ · límite UE: 40 µg/m³ |
+| pm25_anual | PM2.5 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2026 | Promedio de 1 estación(es) con cobertura ≥ 75 % en 2026. Guía OMS 2021: 5 µg/m³ · límite UE: 25 µg/m³ |
+| pm10_anual | PM10 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2026 | Promedio de 2 estación(es) con cobertura ≥ 75 % en 2026. Guía OMS 2021: 15 µg/m³ · límite UE: 40 µg/m³ |
+| no2_anual | NO2 media anual (estaciones oficiales) | µg/m³ | eea | derivado | 2026 | Promedio de 2 estación(es) con cobertura ≥ 75 % en 2026. Guía OMS 2021: 10 µg/m³ · límite UE: 40 µg/m³ |
 | estaciones_eea | Estaciones oficiales con reporte a la EEA | estaciones | eea | observado | 2026 |  |
-| pm25_ciudadano | PM2.5 ahora · mediana de sensores ciudadanos | µg/m³ | sensor_community | en_vivo | 2026-10-22 22:47:02 | Promedio de 5 minutos; sensores ópticos de bajo costo (sobreestiman con humedad alta). |
-| sensores_ciudadanos | Sensores ciudadanos de partículas en Budapest | sensores | sensor_community | en_vivo | 2026-10-22 22:47:02 |  |
-| sensebox | senseBoxes con datos en los últimos 7 días | cajas | opensensemap | en_vivo | 2026-10-22 | 176 cajas registradas en el área |
-| temp_anual | Temperatura media del último año completo | °C | open_meteo | modelado | 2025 |  |
-| anomalia | Anomalía frente a 2000–2009 | °C | open_meteo | derivado | 2025 |  |
-| dias_calor | Días con máxima ≥ 30 °C | días | open_meteo | modelado | 2025 |  |
-| noches_tropicales | Noches tropicales (mínima ≥ 20 °C) | noches | open_meteo | modelado | 2025 |  |
+| pm25_ciudadano | PM2.5 ahora · mediana de sensores ciudadanos | µg/m³ | sensor_community | bajo_costo | 2026-10-22 22:47:02 | Bajo costo: sensores ópticos ciudadanos sin calibración oficial (sobreestiman con humedad alta); promedio de 5 minutos en la instantánea. |
+| sensores_ciudadanos | Sensores ciudadanos de partículas (bajo costo) en Budapest | sensores | sensor_community | bajo_costo | 2026-10-22 22:47:02 |  |
+| sensebox | senseBoxes (bajo costo) con datos en los últimos 7 días | cajas | opensensemap | bajo_costo | 2026-10-22 | 176 cajas registradas en el área |
+| temp_anual | Temperatura media del último año completo | °C | open_meteo | modelo | 2025 | Modelo: reanálisis ERA5 servido por Open-Meteo, no medición de estación. |
+| anomalia | Anomalía frente a 2000–2009 | °C | open_meteo | modelo | 2025 | Diferencia calculada sobre el reanálisis ERA5 (modelo). |
+| dias_calor | Días con máxima ≥ 30 °C | días | open_meteo | modelo | 2025 | Modelo: reanálisis ERA5 servido por Open-Meteo, no medición de estación. |
+| noches_tropicales | Noches tropicales (mínima ≥ 20 °C) | noches | open_meteo | modelo | 2025 | Modelo: reanálisis ERA5 servido por Open-Meteo, no medición de estación. |
 | sellado | Suelo sellado medio (ponderado por área) | % | copernicus | derivado | 2018 |  |
 | arbolado | Cobertura arbórea media (ponderada por área) | % | copernicus | derivado | 2018 |  |
 
@@ -632,11 +644,11 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 | particulas | Partículas: media anual de estaciones oficiales | µg/m³ | eea | 24 | 2003 – 2026 | PM10, PM2.5 |
 | no2 | NO₂: media anual de estaciones oficiales | µg/m³ | eea | 25 | 1997 – 2026 | — |
 | pm10_dias | Días con PM10 > 50 µg/m³ (estación más expuesta) | días | eea | 24 | 2003 – 2026 | — |
-| pm25_ciudadano | PM2.5 ciudadano por instantánea | µg/m³ | sensor_community | 3 | 2026-09-29T22:28:00Z – 2026-10-22T22:47:00Z | — |
-| cams_pm25 | PM2.5 modelado CAMS (−2 a +3 días) | µg/m³ | open_meteo | 120 | 2026-10-21T00:00 – 2026-10-25T23:00 | PM2.5, PM10 |
-| temperatura_horaria | Temperatura (−2 a +3 días) | °C | open_meteo | 120 | 2026-10-21T00:00 – 2026-10-25T23:00 | — |
-| temperatura_anual | Temperatura media anual | °C | open_meteo | 26 | 2000 – 2025 | — |
-| dias_calor | Días con máxima ≥ 30 °C | días | open_meteo | 26 | 2000 – 2025 | — |
+| pm25_ciudadano | PM2.5 ciudadano de bajo costo por instantánea | µg/m³ | sensor_community | 3 | 2026-09-29T22:28:00Z – 2026-10-22T22:47:00Z | — |
+| cams_pm25 | PM2.5 y PM10 · modelo CAMS (−2 a +3 días) | µg/m³ | open_meteo | 120 | 2026-10-21T00:00 – 2026-10-25T23:00 | PM2.5, PM10 |
+| temperatura_horaria | Temperatura · modelo de pronóstico (−2 a +3 días) | °C | open_meteo | 120 | 2026-10-21T00:00 – 2026-10-25T23:00 | — |
+| temperatura_anual | Temperatura media anual · modelo ERA5 | °C | open_meteo | 26 | 2000 – 2025 | — |
+| dias_calor | Días con máxima ≥ 30 °C · modelo ERA5 | días | open_meteo | 26 | 2000 – 2025 | — |
 
 **Listas**
 
@@ -652,14 +664,14 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 
 | clave | etiqueta | unidad | fuente | estado | vigencia | nota |
 |---|---|---|---|---|---|---|
-| fuentes_ok | Fuentes operativas | de 12 | lago | derivado | 2026-10-22 |  |
+| fuentes_ok | Fuentes operativas | de 13 | lago | derivado | 2026-10-22 |  |
 | bronze_mb | Volumen crudo acumulado en bronze | MB | lago | derivado | 2026-10-22 |  |
 
 **Listas**
 
 | clave | filas | columnas |
 |---|---|---|
-| fuentes | 12 | acceso, bronze_archivos, bronze_mb, error, estado, frecuencia, id, licencia, nombre, organismo, tablas, ultima_ingesta, url |
+| fuentes | 13 | acceso, bronze_archivos, bronze_mb, codigo, error, estado, frecuencia, id, licencia, nombre, organismo, probada, tablas, ultima_ingesta, url |
 | zonas | 4 | contenido, ruta, zona |
 | brechas | 5 | motivo, tema |
 
@@ -669,23 +681,23 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 
 | clave | etiqueta | unidad | fuente | estado | vigencia | nota |
 |---|---|---|---|---|---|---|
-| poblacion_nuts3 | Población al 1 de enero (NUTS3 HU110) | hab | ksh | observado | 2024 |  |
-| edad_mediana | Edad mediana | años | ksh | observado | 2024 |  |
-| dependencia_vejez | Dependencia de vejez (65+ / 20–64) | % | ksh | observado | 2024 |  |
-| natalidad | Tasa bruta de natalidad | ‰ | ksh | observado | 2023 |  |
-| mortalidad | Tasa bruta de mortalidad | ‰ | ksh | observado | 2023 |  |
-| esperanza_vida | Esperanza de vida al nacer (HU11) | años | ksh | observado | 2023 |  |
-| mortalidad_infantil | Mortalidad infantil (HU11) | ‰ | ksh | observado | 2023 |  |
+| poblacion_nuts3 | Población al 1 de enero (NUTS3 HU110) | hab | ksh_hvd | observado | 2024 |  |
+| edad_mediana | Edad mediana | años | ksh_hvd | observado | 2024 |  |
+| dependencia_vejez | Dependencia de vejez (65+ / 20–64) | % | ksh_hvd | observado | 2024 |  |
+| natalidad | Tasa bruta de natalidad | ‰ | ksh_hvd | observado | 2023 |  |
+| mortalidad | Tasa bruta de mortalidad | ‰ | ksh_hvd | observado | 2023 |  |
+| esperanza_vida | Esperanza de vida al nacer (HU11) | años | ksh_hvd | observado | 2023 |  |
+| mortalidad_infantil | Mortalidad infantil (HU11) | ‰ | ksh_hvd | observado | 2023 |  |
 
 **Series** (`puntos` = `[[x, y], …]`; con varias series, `series[].puntos`)
 
 | clave | etiqueta | unidad | fuente | puntos | rango | subseries |
 |---|---|---|---|---|---|---|
-| poblacion | Población de Budapest (HU110) | hab | ksh | 11 | 2014 – 2024 | — |
-| edad_mediana | Edad mediana | años | ksh | 11 | 2014 – 2024 | Budapest, Hungría |
-| esperanza_vida | Esperanza de vida al nacer | años | ksh | 10 | 2014 – 2023 | Mujeres, Hombres |
-| natalidad_mortalidad | Natalidad y mortalidad | ‰ | ksh | 11 | 2013 – 2023 | Natalidad, Mortalidad |
-| dependencia | Dependencia de vejez | % | ksh | 11 | 2014 – 2024 | Budapest, Hungría |
+| poblacion | Población de Budapest (HU110) | hab | ksh_hvd | 11 | 2014 – 2024 | — |
+| edad_mediana | Edad mediana | años | ksh_hvd | 11 | 2014 – 2024 | Budapest, Hungría |
+| esperanza_vida | Esperanza de vida al nacer | años | ksh_hvd | 10 | 2014 – 2023 | Mujeres, Hombres |
+| natalidad_mortalidad | Natalidad y mortalidad | ‰ | ksh_hvd | 11 | 2013 – 2023 | Natalidad, Mortalidad |
+| dependencia | Dependencia de vejez | % | ksh_hvd | 11 | 2014 – 2024 | Budapest, Hungría |
 
 **Listas**
 
@@ -726,7 +738,7 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 | riesgo_pobreza_exclusion | Riesgo de pobreza o exclusión (AROPE) | % | eurostat | observado | 2025 |  |
 | educacion_terciaria | Población 25–64 con estudios terciarios | % | eurostat | observado | 2025 |  |
 | gasto_id_pib | Gasto en I+D | % PIB | eurostat | observado | 2024 |  |
-| precio_vivienda | Índice de precios de vivienda (Hungría) | 2015 = 100 | eurostat | observado | 2026-T2 | Eurostat no publica el índice a escala regional: referencia nacional. |
+| precio_vivienda | Índice de precios de vivienda (Hungría, como proxy de Budapest) | 2015 = 100 | eurostat | proxy | 2026-T2 | PROXY: Eurostat no publica el índice por región; se usa el de toda Hungría como aproximación para Budapest. |
 | empresas_activas | Empresas activas (HU110) | empresas | eurostat | observado | 2020 |  |
 | viviendas_1000 | Viviendas por 1.000 habitantes | viv/1.000 hab | ksh | derivado | 2026 |  |
 
@@ -741,7 +753,7 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 | riesgo_pobreza_exclusion | Riesgo de pobreza o exclusión (AROPE) | % | eurostat | 8 | 2018 – 2025 | — |
 | educacion_terciaria | Población 25–64 con estudios terciarios | % | eurostat | 13 | 2013 – 2025 | — |
 | gasto_id_pib | Gasto en I+D | % PIB | eurostat | 8 | 2017 – 2024 | — |
-| precio_vivienda | Índice de precios de vivienda · Hungría | 2015 = 100 | eurostat | 78 | 2007 – 2026-T2 | — |
+| precio_vivienda | Índice de precios de vivienda · Hungría (proxy de Budapest) | 2015 = 100 | eurostat | 78 | 2007 – 2026-T2 | — |
 
 **Listas**
 
@@ -761,8 +773,7 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 | paradas | Paradas y andenes con servicio | paradas | bkk_gtfs | observado | 2026-10-28 |  |
 | accesibles | Paradas declaradas accesibles en silla de ruedas | % | bkk_gtfs | observado | 2026-10-28 |  |
 | lineas | Líneas con servicio el día de referencia | líneas | bkk_gtfs | observado | 2026-10-28 |  |
-| bubi_estaciones | Estaciones MOL Bubi (cartografía OSM) | estaciones | osm_overpass | observado | 2026-10-22 | El feed del operador no publica estaciones: ubicaciones de amenity=bicycle_rental en OSM, sin disponibilidad. |
-| bubi_flota | Flota objetivo de MOL Bubi declarada por el operador | bicicletas | bubi | en_vivo | 2026-10-22 |  |
+| bubi_estaciones | Estaciones MOL Bubi (cartografía OSM) | estaciones | osm_overpass | observado | 2026-10-22 | El feed del operador (F07) no publica estaciones y queda como fuente candidata: ubicaciones de OSM con red MOL Bubi, sin disponibilidad. |
 | turismos | Parque de turismos (HU11) | vehículos | eurostat | observado | 2024 |  |
 | motorizacion | Motorización | turismos/1.000 hab | eurostat | derivado | 2024 |  |
 
@@ -781,6 +792,14 @@ Estructura común: `{tema, titulo, probado, fuentes[], cifras{}, series{}, lista
 | movilidad_distritos | 23 | bubi, distrito, guiado_pct, paradas, salidas, salidas_1000 |
 | feeds | 5 | entidad, estado, mdb_id, proveedor, requiere_clave, tipo, url_directa |
 | urban_audit_transporte | 13 | anio, codigo, indicador, valor |
+
+### `preguntas.json` · Preguntas del sistema
+
+**Listas**
+
+| clave | filas | columnas |
+|---|---|---|
+| preguntas | 6 | cambiaria, estado, fuentes, id, limites, motivo, pregunta, respuesta, seccion |
 
 ### `territorio.json` · Territorio
 
@@ -853,7 +872,7 @@ Cada `score_<dimensión>` es el promedio de las métricas de esa dimensión norm
 | paradas_km2 | Paradas con servicio por km² | paradas/km² | bkk_gtfs | derivado | movilidad | dir | paradas (location_type 0) con ≥1 salida el día de referencia / km² |
 | salidas_1000 | Salidas de transporte público por 1.000 hab | salidas/día | bkk_gtfs | derivado | movilidad | dir | Σ stop_times del día laborable de referencia / población × 1.000 |
 | guiado_pct | Paradas servidas por modo guiado | % | bkk_gtfs | derivado | movilidad | dir | paradas con metro, tranvía, trolebús o HÉV / paradas con servicio |
-| bubi_km2 | Estaciones MOL Bubi por km² | est/km² | bubi | en_vivo | movilidad | dir | estaciones con número / km² |
+| bubi_km2 | Estaciones MOL Bubi por km² | est/km² | osm_overpass | observado | movilidad | dir | estaciones OSM amenity=bicycle_rental de la red MOL Bubi / km² |
 | educacion_10k | Centros educativos por 10.000 hab | centros | osm_overpass | derivado | servicios | dir | POI categoría educacion / población × 10.000 |
 | salud_10k | Equipamientos de salud por 10.000 hab | equip. | osm_overpass | derivado | servicios | dir | POI categoría salud / población × 10.000 |
 | cultura_km2 | Cultura y turismo por km² | POI/km² | osm_overpass | derivado | servicios | dir | POI cultura + turismo / km² |
@@ -865,7 +884,7 @@ Cada `score_<dimensión>` es el promedio de las métricas de esa dimensión norm
 | sellado | Suelo sellado medio | % | copernicus | observado | verde | inv | Media de Imperviousness Density 2018 (0–100) |
 | sellado_alto | Superficie muy sellada (≥80 %) | % sup. | copernicus | observado | — | — | Píxeles con IMD ≥ 80 / píxeles válidos |
 | edificios_km2 | Edificios OSM por km² | edif./km² | osm_overpass | derivado | — | — | building=* (vías + relaciones) / km² |
-| pm25_sensores | PM2.5 ciudadano (mediana) | µg/m³ | sensor_community | en_vivo | ambiente | inv | Mediana de sensores exteriores del distrito en la instantánea |
+| pm25_sensores | PM2.5 ciudadano de bajo costo (mediana) | µg/m³ | sensor_community | bajo_costo | ambiente | inv | Mediana de sensores ciudadanos exteriores de bajo costo del distrito en la instantánea (mínimo 2) |
 
 ## 7. Gold · capas geográficas (datalake/gold/geo/*.geojson)
 
@@ -874,10 +893,10 @@ Cada `score_<dimensión>` es el promedio de las métricas de esa dimensión norm
 | distritos.geojson | MultiPolygon | 23 distritos simplificados (~13 m) con todas las métricas del atlas y score_<dimensión> 0–100 | distritos + métricas gold | 23 |
 | paradas.geojson | Point | n nombre · s salidas día ref. · r rutas · m modos · d distrito | gtfs_paradas | 5562 |
 | lineas.geojson | LineString | modo · linea · color | gtfs_lineas_geom | 57 |
-| bubi.geojson | Point | n nombre · b bicicletas · c anclajes · d distrito | bubi_estaciones | 228 |
-| sensores.geojson | Point | f fuente (sensor_community\|opensensemap) · id · pm25 · pm10 · t temperatura · ts · d distrito | sc_sensores + osem_sensores | 233 |
+| bubi.geojson | Point | n nombre · b bicicletas y c anclajes (solo si F07 está integrada) · o origen (osm \| nextbike_vivo) · d distrito | bubi_estaciones + bubi_disponibilidad | 222 |
+| sensores.geojson | Point | f fuente (sensor_community\|opensensemap) · id · pm25 · pm10 · t temperatura · ts · d distrito. Coordenadas redondeadas a 3 decimales (~110 m) y sin nombre de caja para no exponer viviendas | sc_sensores + osem_sensores | 233 |
 | eea.geojson | Point | estacion · nombre · tipo · area · PM25 · PM10 · NO2 · O3 (último año) · anio | eea_estaciones + eea_estadisticas | 15 |
-| poi.geojson | Point | c categoría · s subcategoría OSM · n nombre · d distrito | osm_poi | 16889 |
+| poi.geojson | Point | c categoría · s subcategoría OSM · n nombre · d distrito | osm_poi | 16717 |
 
 ## 8. Capas de mapa externas (no almacenadas)
 

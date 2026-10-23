@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Exploración · Leaflet</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; font: 14px/1.5 system-ui, sans-serif; background: #0a1016; color: #e6edf3; }
+    header { padding: 12px 16px; }
+    h1 { font-size: 18px; margin: 0 0 4px; }
+    #mapa { height: 70vh; }
+    #medidas { font: 12px ui-monospace, monospace; color: #a9b7c4; padding: 8px 16px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Prueba de herramienta: Leaflet 1.9.4</h1>
+    <div>Mismos datos que el sitio (gold/geo/distritos.geojson y paradas.geojson, servidos por /api/datos con sesión). Coropleta por densidad (F08) y 5 586 paradas por salidas (F05).</div>
+  </header>
+  <div id="mapa"></div>
+  <div id="medidas">midiendo…</div>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // Prototipo de exploración: no forma parte del sitio. Mide qué resuelve Leaflet con los datos del lago.
+    const R = window.RESULTADO = { herramienta: 'Leaflet 1.9.4', licencia: 'BSD-2-Clause' };
+    const t0 = performance.now();
+    const datos = f => fetch('/api/datos?f=' + encodeURIComponent(f), { credentials: 'same-origin' }).then(r => { if (!r.ok) throw new Error(f + ' ' + r.status); return r.json(); });
+    (async () => {
+      const mapa = L.map('mapa', { preferCanvas: true }).setView([47.4979, 19.0402], 11);
+      L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(mapa);
+      const [gj, par] = await Promise.all([datos('geo/distritos.geojson'), datos('geo/paradas.geojson')]);
+      R.ms_descarga = Math.round(performance.now() - t0);
+      const vals = gj.features.map(f => f.properties.densidad).filter(v => v != null), lo = Math.min(...vals), hi = Math.max(...vals);
+      const color = v => `hsl(${190 - 150 * (v - lo) / (hi - lo)}, 60%, ${30 + 25 * (v - lo) / (hi - lo)}%)`;
+      const t1 = performance.now();
+      L.geoJSON(gj, { style: f => ({ color: '#0a1016', weight: 1, fillColor: color(f.properties.densidad), fillOpacity: .6 }),
+        onEachFeature: (f, capa) => capa.bindPopup(`<b>${f.properties.romano}. ${f.properties.apodo}</b><br>${Math.round(f.properties.densidad)} hab/km² · F08 KSH`) }).addTo(mapa);
+      L.geoJSON(par, { pointToLayer: (f, ll) => L.circleMarker(ll, { radius: 1.5 + Math.sqrt(f.properties.s) / 12, weight: 0, fillColor: '#e8a33d', fillOpacity: .8 }) }).addTo(mapa);
+      R.ms_render = Math.round(performance.now() - t1);
+      R.distritos = gj.features.length; R.paradas = par.features.length;
+      R.inclinacion_3d = typeof mapa.setPitch === 'function';  // Leaflet no tiene cámara inclinada ni extrusión 3D
+      R.teselas_vectoriales = !!(L.vectorGrid);                  // requiere plugin aparte
+      document.getElementById('medidas').textContent = JSON.stringify(R, null, 1);
+    })().catch(e => { R.error = String(e); document.getElementById('medidas').textContent = 'Error: ' + e; });
+  </script>
+</body>
+</html>

@@ -97,6 +97,26 @@ def ultimo_bronze(fuente, nombre):
     return None
 
 
+def leer_bronze_valido(fuente, nombre, valido):
+    """Como leer_bronze_json, pero salta las ingestas que no pasan la verificación (p. ej. respuestas vacías)
+    y usa la más reciente que sí la pasa. Devuelve (json, fecha) o (None, None)."""
+    base = config.BRONZE / fuente
+    if not base.exists():
+        return None, None
+    for fecha in sorted((d.name for d in base.iterdir() if d.is_dir()), reverse=True):
+        p = base / fecha / nombre
+        if not p.exists():
+            continue
+        try:
+            j = json.loads(p.read_text(encoding="utf-8"))
+        except ValueError:
+            j = None
+        if j is not None and valido(j):
+            return j, fecha
+        log(fuente, f"bronze {fecha}/{nombre} no pasa la verificación: se usa una ingesta anterior")
+    return None, None
+
+
 def leer_bronze_json(fuente, nombre):
     p = ultimo_bronze(fuente, nombre)
     return (json.loads(p.read_text(encoding="utf-8")), p.parent.name) if p else (None, None)

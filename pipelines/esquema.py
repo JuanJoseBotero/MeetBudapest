@@ -44,6 +44,7 @@ ESQUEMA = {
             ("lon", "REAL", "grados", "Longitud"),
             ("estrellas", "REAL", "", "Etiqueta stars (alojamiento)"),
             ("wikidata", "TEXT", "", "Etiqueta wikidata"),
+            ("red", "TEXT", "", "Etiqueta network (o brand si falta): red u operador, p. ej. «MOL Bubi»"),
             COL_DISTRITO,
         ],
     },
@@ -157,25 +158,33 @@ ESQUEMA = {
         ],
     },
     "bubi_estaciones": {
-        "fuente": "bubi", "grano": "1 fila por estación en la última instantánea",
-        "descripcion": "Estaciones MOL Bubi con disponibilidad en el momento de la ingesta.",
+        "fuente": "osm_overpass + bubi", "grano": "1 fila por estación",
+        "descripcion": ("Ubicación de las estaciones MOL Bubi. Mientras el feed del operador (bubi, F07) no publique estaciones, "
+                        "salen de OSM: amenity=bicycle_rental con red MOL Bubi (origen = osm)."),
         "columnas": [
-            ("estacion_id", "INTEGER", "", "uid nextbike"),
-            ("numero", "TEXT", "", "Número de estación"),
+            ("estacion_id", "INTEGER", "", "Id OSM de la estación (o uid nextbike si el feed vuelve a publicarlas)"),
             ("nombre", "TEXT", "", "Nombre"),
             ("lat", "REAL", "grados", ""),
             ("lon", "REAL", "grados", ""),
+            ("origen", "TEXT", "", "osm (OSM, red MOL Bubi) | nextbike_vivo (feed del operador)"),
+            COL_DISTRITO,
+        ],
+    },
+    "bubi_disponibilidad": {
+        "fuente": "bubi", "grano": "1 fila por estación en la última instantánea (solo si el feed publica estaciones)",
+        "descripcion": "Bicicletas y anclajes por estación según el feed del operador. Hoy no existe: el feed no publica estaciones y la fuente es candidata.",
+        "columnas": [
+            ("estacion_id", "INTEGER", "", "uid nextbike"),
+            ("numero", "TEXT", "", "Número de estación"),
             ("bicis", "INTEGER", "bicicletas", "Bicicletas disponibles"),
             ("anclajes", "INTEGER", "anclajes", "bike_racks (capacidad)"),
             ("anclajes_libres", "INTEGER", "anclajes", "free_racks"),
             ("ts", "TEXT", "ISO 8601", "Hora de la instantánea"),
-            ("origen", "TEXT", "", "nextbike_vivo (feed del operador con disponibilidad) | osm (respaldo: amenity=bicycle_rental de OSM, sin disponibilidad)"),
-            COL_DISTRITO,
         ],
     },
     "bubi_historico": {
-        "fuente": "bubi", "grano": "1 fila por ejecución (se acumula)",
-        "descripcion": "Serie de instantáneas agregadas del sistema MOL Bubi.",
+        "fuente": "bubi", "grano": "1 fila por ejecución en que el feed publica estaciones (se acumula)",
+        "descripcion": "Serie de instantáneas agregadas del sistema MOL Bubi. Solo se escribe cuando la fuente está integrada.",
         "columnas": [
             ("ts", "TEXT", "ISO 8601", "Hora de la instantánea"),
             ("estaciones", "INTEGER", "", "Estaciones con disponibilidad publicada (0 si el operador no la expone)"),
@@ -186,7 +195,7 @@ ESQUEMA = {
     },
     # ------------------------------------------------------------------ estadística oficial
     "ksh_hvd": {
-        "fuente": "ksh", "grano": "1 fila por dataset × indicador × geo × año × sexo × edad",
+        "fuente": "ksh_hvd", "grano": "1 fila por dataset × indicador × geo × año × sexo × edad",
         "descripcion": "Series HVD de KSH (SDMX-CSV) filtradas a Hungría (HU), Budapest NUTS2 (HU11) y NUTS3 (HU110).",
         "columnas": [
             ("recurso", "TEXT", "", "Clave del recurso: poblacion_edad_sexo, edad_mediana, natalidad, mortalidad, esperanza_vida, mortalidad_infantil"),
@@ -257,7 +266,7 @@ ESQUEMA = {
     },
     "sc_sensores": {
         "fuente": "sensor_community", "grano": "1 fila por sensor en la instantánea",
-        "descripcion": "Promedio de 5 minutos de sensores ciudadanos en un radio de 20 km del centro (solo exteriores).",
+        "descripcion": "BAJO COSTO · Promedio de 5 minutos de sensores ciudadanos ópticos de bajo costo (sin calibración oficial) en un radio de 20 km del centro (solo exteriores).",
         "columnas": [
             ("sensor_id", "INTEGER", "", "Id de sensor"),
             ("ubicacion_id", "INTEGER", "", "Id de ubicación"),
@@ -274,7 +283,7 @@ ESQUEMA = {
     },
     "sc_historico": {
         "fuente": "sensor_community", "grano": "1 fila por ejecución (se acumula)",
-        "descripcion": "Mediana urbana de PM2.5/PM10 de sensores ciudadanos en cada instantánea.",
+        "descripcion": "BAJO COSTO · Mediana urbana de PM2.5/PM10 de sensores ciudadanos de bajo costo en cada instantánea.",
         "columnas": [
             ("ts", "TEXT", "ISO 8601", "Hora de la ingesta"),
             ("sensores_pm", "INTEGER", "", "Sensores de partículas con dato"),
@@ -284,7 +293,7 @@ ESQUEMA = {
     },
     "osem_sensores": {
         "fuente": "opensensemap", "grano": "1 fila por sensor de senseBox dentro del bbox",
-        "descripcion": "Último valor de cada sensor de las senseBoxes exteriores de Budapest.",
+        "descripcion": "BAJO COSTO · Último valor de cada sensor de las senseBoxes exteriores de Budapest (sensores ciudadanos de bajo costo).",
         "columnas": [
             ("box_id", "TEXT", "", "Id de la senseBox"),
             ("box_nombre", "TEXT", "", "Nombre"),
@@ -303,7 +312,7 @@ ESQUEMA = {
     },
     "meteo_diario": {
         "fuente": "open_meteo", "grano": "1 fila por día (desde 2000-01-01)",
-        "descripcion": "Reanálisis ERA5 vía Open-Meteo Archive en el centro de Budapest.",
+        "descripcion": "MODELO · Reanálisis ERA5 (salida de modelo, no medición) vía Open-Meteo Archive en el centro de Budapest.",
         "columnas": [
             ("fecha", "TEXT PRIMARY KEY", "fecha", ""),
             ("tmax", "REAL", "°C", "temperature_2m_max"),
@@ -314,7 +323,7 @@ ESQUEMA = {
     },
     "meteo_horario": {
         "fuente": "open_meteo", "grano": "1 fila por hora (−2 a +3 días)",
-        "descripcion": "Pronóstico y observación reciente horaria + calidad del aire modelada CAMS Europa.",
+        "descripcion": "MODELO · Pronóstico horario de Open-Meteo y calidad del aire del modelo CAMS Europa (~10 km); nada de esta tabla es medición.",
         "columnas": [
             ("hora", "TEXT PRIMARY KEY", "local", ""),
             ("temperatura", "REAL", "°C", "temperature_2m"),

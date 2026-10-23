@@ -9,16 +9,16 @@
 
   // capa -> definición para el panel
   const CAPAS = {
-    distritos: { t: 'Distritos (coropleta)', c: '#3fb8c9' },
-    lineas: { t: 'Líneas guiadas (GTFS)', c: '#e8a33d' },
-    paradas: { t: 'Paradas por salidas/día', c: '#f3c77a' },
-    bubi: { t: 'Estaciones MOL Bubi', c: '#6fcf6a' },
-    poi: { t: 'Equipamientos OSM', c: '#9b8cf0' },
-    sensores: { t: 'Sensores ciudadanos PM2.5', c: '#c9c35a' },
-    eea: { t: 'Estaciones oficiales EEA', c: '#e5664f' },
-    edificios: { t: 'Edificios 3D (OSM)', c: '#a9b7c4' },
-    sellado: { t: 'Copernicus · suelo sellado', c: '#e56f9c' },
-    arbolado: { t: 'Copernicus · cobertura arbórea', c: '#6fcf6a' },
+    distritos: { t: 'Distritos (coropleta) · F02 F08', c: '#3fb8c9' },
+    lineas: { t: 'Líneas guiadas (GTFS) · F05', c: '#e8a33d' },
+    paradas: { t: 'Paradas por salidas/día · F05', c: '#f3c77a' },
+    bubi: { t: 'Estaciones MOL Bubi · F02', c: '#6fcf6a' },
+    poi: { t: 'Equipamientos OSM · F02', c: '#9b8cf0' },
+    sensores: { t: 'Sensores PM2.5 (bajo costo) · F11 F12', c: '#c9c35a' },
+    eea: { t: 'Estaciones oficiales EEA · F13', c: '#e5664f' },
+    edificios: { t: 'Edificios 3D (OpenFreeMap, OSM)', c: '#a9b7c4' },
+    sellado: { t: 'Suelo sellado · F04 (ráster)', c: '#e56f9c' },
+    arbolado: { t: 'Cobertura arbórea · F04 (ráster)', c: '#6fcf6a' },
   };
   const LENTES = {
     cruce: { t: '◎ Cruce urbano', metrica: 'indice', capas: ['distritos', 'lineas', 'edificios'], pitch: 45, poi: null, ley: 'Índice de equilibrio (promedio de las 5 dimensiones, 0–100)' },
@@ -29,6 +29,7 @@
     aire: { t: '≋ Aire', metrica: 'sellado', capas: ['distritos', 'sensores', 'eea'], pitch: 0, poi: null, ley: 'Suelo sellado % (Copernicus 2018)' },
   };
   let map, datos = {}, lente = 'cruce', activas = new Set(), base = 'oscuro', lugares = [], rango = [0, 1];
+  let PROBADAS = '';  // fechas de prueba de las fuentes del mapa, leídas del catálogo del lago
 
   const R = 6371008.8, rad = x => x * Math.PI / 180;
   const dist = (a, b) => { const dl = rad(b[1] - a[1]), dn = rad(b[0] - a[0]), h = Math.sin(dl / 2) ** 2 + Math.cos(rad(a[1])) * Math.cos(rad(b[1])) * Math.sin(dn / 2) ** 2; return 2 * R * Math.asin(Math.sqrt(h)); };
@@ -141,7 +142,7 @@
     const L = LENTES[lente], f = v => G.fmt.n(v, Math.abs(v) < 10 ? 1 : 0);
     let h = `<b>${G.esc(L.ley)}</b><div class="rampa" style="background:linear-gradient(90deg,${G.RAMPA.join(',')})"></div><div class="extremos"><span>${f(rango[0])}</span><span>${f(rango[1])}</span></div>`;
     if (activas.has('paradas')) h += `<div style="margin-top:8px">● Paradas: tamaño y color = salidas del día laborable</div>`;
-    if (activas.has('sensores') || activas.has('eea')) h += `<div style="margin-top:8px">PM2.5 µg/m³: <span style="color:#3cbf7a">●</span>&lt;5 <span style="color:#c9c35a">●</span>&lt;15 <span style="color:#e8a33d">●</span>&lt;25 <span style="color:#e5664f">●</span>&lt;50 <span style="color:#b0306a">●</span>50+<br><small>Aro blanco grueso: estación oficial EEA (media anual)</small></div>`;
+    if (activas.has('sensores') || activas.has('eea')) h += `<div style="margin-top:8px">PM2.5 µg/m³: <span style="color:#3cbf7a">●</span>&lt;5 <span style="color:#c9c35a">●</span>&lt;15 <span style="color:#e8a33d">●</span>&lt;25 <span style="color:#e5664f">●</span>&lt;50 <span style="color:#b0306a">●</span>50+<br><small>Aro blanco grueso: estación oficial EEA (media anual). Puntos pequeños: sensores ciudadanos de bajo costo (instantánea).</small></div>`;
     if (activas.has('poi') && L.poi) h += `<div style="margin-top:8px">${L.poi.map(c => `<span style="color:${CAT_COLOR[c]}">●</span> ${G.esc(SECCIONES.CATEG[c] || c)}`).join(' ')}</div>`;
     if (activas.has('sellado') || activas.has('arbolado')) h += `<div style="margin-top:8px"><small>Ráster Copernicus HRL 2018 (10 m) servido por la EEA</small></div>`;
     $('#leyenda').innerHTML = h;
@@ -174,12 +175,12 @@
         <dt>Modos</dt><dd>${modos.map(m => SECCIONES.MODOS[m] || m).join(', ') || '—'}</dd>
         <dt>Estaciones Bubi</dt><dd>${bubi5}</dd>
         ${Object.entries(porCat).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([c, k]) => `<dt><span style="color:${CAT_COLOR[c]}">●</span> ${G.esc(SECCIONES.CATEG[c] || c)}</dt><dd>${k}</dd>`).join('')}
-        <dt>PM2.5 sensor más cercano</dt><dd>${sen ? `${n(sen.properties.pm25, 1)} µg/m³ <small>(${n(dsen / 1000, 1)} km)</small>` : '—'}</dd>
+        <dt>PM2.5 sensor ciudadano (bajo costo)</dt><dd>${sen ? `${n(sen.properties.pm25, 1)} µg/m³ <small>(${n(dsen / 1000, 1)} km)</small>` : '—'}</dd>
         <dt>Estación oficial más cercana</dt><dd>${est ? `${G.esc(est.properties.nombre)} <small>(${n(dest / 1000, 1)} km)</small>` : '—'}</dd>
         ${est ? `<dt>NO₂ · PM2.5 anual</dt><dd>${n(est.properties.NO2, 1)} · ${n(est.properties.PM25, 1)} <small>${est.properties.anio || ''}</small></dd>` : ''}
         ${dp ? `<dt>Densidad del distrito</dt><dd>${n(dp.densidad)} hab/km²</dd><dt>Arbolado · sellado</dt><dd>${n(dp.arbolado, 1)} % · ${n(dp.sellado, 1)} %</dd>` : ''}
       </dl>
-      <div class="src">GTFS BKK (miércoles ref.) · OSM · Sensor.Community/openSenseMap (instantánea) · EEA (media anual) · Copernicus 2018</div>
+      <div class="src">F05 GTFS BKK (miércoles ref.) · F02 OSM (equipamientos, Bubi, distritos) · F08 KSH (población) · F11/F12 sensores de bajo costo (instantánea) · F13 EEA (media anual) · F04 Copernicus 2018 · probadas ${G.esc(PROBADAS)}</div>
       ${dp ? `<button class="ghost" type="button" id="fichaDiag" style="margin-top:10px;width:100%">Ver ${G.esc(dp.romano)} en el diagnóstico</button>` : ''}`;
     $('#ficha').hidden = false;
     $('#ficha .cerrar').onclick = () => { $('#ficha').hidden = true; map.getSource('radio').setData({ type: 'FeatureCollection', features: [] }); };
@@ -199,6 +200,11 @@
     $('#hud').innerHTML = `<span>LAT <b>${c.lat.toFixed(4)}</b></span><span>LON <b>${c.lng.toFixed(4)}</b></span><span>ZOOM <b>${z.toFixed(1)}</b></span><span>RUMBO <b>${Math.round(map.getBearing())}°</b></span><span>INCL. <b>${Math.round(map.getPitch())}°</b></span><span>100 px ≈ <b>${m >= 1000 ? G.fmt.n(m / 1000, 1) + ' km' : Math.round(m) + ' m'}</b></span>`;
   }
   function panel() {
+    // En el teléfono el panel empieza plegado para no tapar el mapa; se abre con un toque.
+    const btn = $('#plegarPanel'), cuerpo = $('#mapaPanelCuerpo');
+    const fijar = abierto => { cuerpo.hidden = !abierto; btn.setAttribute('aria-expanded', String(abierto)); btn.classList.toggle('abierto', abierto); };
+    fijar(!matchMedia('(max-width: 960px)').matches);
+    btn.addEventListener('click', () => fijar(cuerpo.hidden));
     $('#lentes').innerHTML = Object.entries(LENTES).map(([k, l]) => `<button type="button" data-l="${k}">${l.t}</button>`).join('');
     $('#lentes').addEventListener('click', e => { const b = e.target.closest('[data-l]'); if (b) aplicarLente(b.dataset.l, true); });
     $('#capas').innerHTML = Object.entries(CAPAS).map(([k, c]) => `<label><input type="checkbox" value="${k}"><i style="background:${c.c}"></i>${G.esc(c.t)}</label>`).join('');
@@ -225,6 +231,8 @@
   window.MAPA = {
     lugares: () => lugares, irA,
     async init(L) {
+      const usadas = ['F02', 'F04', 'F05', 'F08', 'F11', 'F12', 'F13'];
+      PROBADAS = [...new Set(((L.catalogo && L.catalogo.listas.fuentes) || []).filter(f => usadas.includes(f.codigo)).map(f => f.probada).filter(Boolean))].sort().join(', ') || '—';
       if (!window.maplibregl) { $('#mapaWrap').innerHTML = '<p class="notas" style="padding:20px">No se pudo cargar MapLibre GL.</p>'; return; }
       panel();
       map = new maplibregl.Map({ container: 'mapa', style: estilo(), center: CENTRO, zoom: 11.3, pitch: 45, bearing: -12, maxPitch: 75, attributionControl: { compact: true }, hash: false });
