@@ -6,7 +6,7 @@ Tópicos de Sistemas de Información. Tiene dos partes: un **lago de datos** que
 
 Grupo: Juan José Botero · Santiago Idárraga · Samuel Villa. Documentos de la entrega en `docs/`
 (`Diccionario_de_datos_TallerDatos_Entrega2.xlsx`, `Preguntas_por_que_estos_datos_Entrega2.docx`); los IDs de fuente
-F02–F18 de este README son los de la hoja «1. Fuentes» del Excel.
+F02–F18 de este README son los de la hoja "1. Fuentes" del Excel.
 
 Todo funciona con la **biblioteca estándar de Python ≥ 3.10** y JavaScript sin dependencias propias: MapLibre GL
 y las fuentes tipográficas se cargan desde CDN. No hay `pip`, `npm install` ni ninguna llave de pago.
@@ -19,7 +19,7 @@ y las fuentes tipográficas se cargan desde CDN. No hay `pip`, `npm install` ni 
 |---|---|---|
 | Al menos 3 fuentes integradas que alimentan las vistas, con su script de ingesta | 12 fuentes integradas (F02–F06, F08–F14); cada una tiene su módulo `ingestar()` → bronze y `silver()` → tablas | `pipelines/fuentes/*.py`, `python -m pipelines.ejecutar` |
 | Abre bien desde un teléfono | Probado a 375 × 812: el ancho de la página es igual al de la pantalla (sin desplazamiento horizontal), menú lateral plegable y panel de capas del mapa plegado por defecto | cualquier sección en el móvil |
-| Cada cifra muestra a un clic su fuente (ID), vigencia y fecha de prueba | Cada tile lleva su ID (F05…) a la vista; un clic despliega fuente con enlace, vigencia, **fecha en que se probó la fuente**, estado y licencia. Gráficos y tablas lo dicen en su pie: «Fuente: F05 · BKK · probada 2026-10-22» | todas las secciones |
+| Cada cifra muestra a un clic su fuente (ID), vigencia y fecha de prueba | Cada tile lleva su ID (F05…) a la vista; un clic despliega fuente con enlace, vigencia, **fecha en que se probó la fuente**, estado y licencia. Gráficos y tablas lo dicen en su pie: "Fuente: F05 · BKK · probada 2026-10-22" | todas las secciones |
 | Al menos una vista sobre el territorio | Gemelo 3D por distrito (coropleta, paradas, líneas, sensores, equipamientos) y atlas de los 23 distritos con coropleta | *Gemelo territorial 3D* y *Atlas* |
 | Responde al menos dos preguntas de la Entrega 1 y dice cuáles quedan pendientes | Sección *Preguntas del sistema*: las 3 preguntas del Word respondidas con cifras recalculadas en cada ejecución; 3 pendientes con su motivo y lo que tendría que cambiar | *Preguntas del sistema* |
 | Ningún dato de personas a la vista | Los sensores ciudadanos se publican redondeados a ~110 m y sin el nombre libre de la caja; las cifras por distrito son medianas con al menos 2 sensores; silver (ubicación exacta) no se publica | decisión de la pregunta 5 del Word |
@@ -76,11 +76,10 @@ paquetes de Python). No afirmamos nada sobre ellas que no hayamos comprobado.
 
 ---
 
-## 4. Bitácora de IA (actualizada)
+## 4. Bitácora de IA
 
-Numeración de la hoja «3. Bitácora IA» del Excel de la Entrega 2 (#2–#17, la #1 es el ejemplo de la plantilla).
-Las entradas #18 y #19 están solo en este README. **Errores de la IA: 7 de 18**, contando los que la IA cometió en el
-código del propio sistema.
+Numeración de la hoja "3. Bitácora IA" del Excel de la Entrega 2 (#2–#17, la #1 es el ejemplo de la plantilla).
+**Errores de la IA: 7 de 18**, contando los que la IA cometió en el código del propio sistema.
 
 | # | IA | Encargo | Resultado | Fuentes | Qué aprendimos |
 |---|---|---|---|---|---|
@@ -94,12 +93,12 @@ código del propio sistema.
 | 9 | Claude | Registrar la licencia de cada fuente | **Incorrecto** | F05, F06, F07, F09, F11 | 5 de 12 licencias escritas de memoria no coincidían con el publicador (primer commit, `pipelines/config.py`) |
 | 10 | Claude | Feed de estaciones de MOL Bubi | **Inventado** | F18, F07 | Propuso una URL GBFS con formato creíble que devolvió 404 |
 | 11 | Claude | Contar las estaciones Bubi desde OSM | **Incorrecto** | F02, F07 | Contó 228; 8 eran tiendas privadas: son 220 |
-| 12 | Claude | Media anual de PM2.5 oficial 2025 | Parcial | F13 | Llamó «media» a una sola estación con cobertura suficiente |
+| 12 | Claude | Media anual de PM2.5 oficial 2025 | Parcial | F13 | Llamó "media" a una sola estación con cobertura suficiente |
 | 13 | Claude | Suelo sellado y arbolado por distrito | **Incorrecto** | F04 | Su código colapsaba los polígonos y dejó 0 filas en la primera ejecución |
 | 14 | Claude | Datos oficiales de aire de la EEA | Correcto | F13 | Encontró la API SQL de DiscoData: 813 estadísticas de 15 estaciones |
 | 15 | Claude | Que el sitio abriera bien en un teléfono | **Incorrecto** | — | Su propio CSS hacía la página de 434 px en una pantalla de 375 px (subtítulos sin salto de línea); se detectó midiendo el ancho y se corrigió |
-| 16 | Claude | Servidor local de desarrollo | **Incorrecto** | — | Su código dejaba sin respuesta toda petición a un archivo inexistente (curl: «HTTP 000» en vez de 404); se detectó al probar la compuerta con terminal |
-| 17 | Claude | Vigencia de series trimestrales | **Incorrecto** | F10 | Al pasar trimestres a números perdió el T1: el índice de vivienda decía «2026» en vez de «2026-T1» |
+| 16 | Claude | Servidor local de desarrollo | **Incorrecto** | — | Su código dejaba sin respuesta toda petición a un archivo inexistente (curl: "HTTP 000" en vez de 404); se detectó al probar la compuerta con terminal |
+| 17 | Claude | Vigencia de series trimestrales | **Incorrecto** | F10 | Al pasar trimestres a números perdió el T1: el índice de vivienda decía "2026" en vez de "2026-T1" |
 | 18 | Claude | Revisar el sitio contra los mínimos de la Entrega 2 | Correcto | — | Detectó que las cifras no mostraban ID ni fecha de prueba, que las preguntas no estaban en el sitio y que el índice de vivienda era un proxy sin marcar |
 | 19 | Claude | Probar alternativas de visualización con los mismos datos | Correcto | F02, F04, F05, F08, F13 | Prototipos de Leaflet y Observable Plot medidos en el navegador (sección 3) |
 
@@ -111,7 +110,7 @@ abriendo la página del publicador, haciendo la petición HTTP o comparando una 
 
 ## 5. Dos reflexiones del taller
 
-### Datos · «Representación: el mapa no es el territorio»
+### Datos
 
 **¿Quién vive en Budapest y no aparece en nuestras fuentes?**
 
@@ -124,11 +123,11 @@ abriendo la página del publicador, haciendo la petición HTTP o comparando una 
 **¿Qué decisión podría tomarse mal por ese hueco?** El distrito V aparece primero en salidas de transporte por cada
 1 000 residentes (877), pero tiene solo 23 508 residentes. Quien lea esa cifra podría concluir que el centro está
 sobreservido y recortar líneas, cuando quienes las usan son justamente los que no están en el denominador. Por eso la
-respuesta P1 del sitio lleva escrita esa limitación, el diagnóstico avisa que «Aire» falta donde no hay sensores y
+respuesta P1 del sitio lleva escrita esa limitación, el diagnóstico avisa que "Aire" falta donde no hay sensores y
 las preguntas que no podemos responder se publican como pendientes. **Nuestra posición:** el hueco se declara junto a
 la cifra que podría engañar, no en un anexo.
 
-### Seguridad · «Apariencia: parecer protegido no es estar protegido»
+### Seguridad
 
 Probamos la compuerta con terminal, como alguien de afuera (2026-10-22, servidor local; en producción se repite
 cambiando la URL):
@@ -145,9 +144,9 @@ curl -s -o /dev/null -w "%{http_code}\n" "http://localhost:8080/api/datos?f=tema
 | Clave equivocada en `/api/entrar` | 401 |
 | Buscar la clave en el código que recibe el navegador (`grep -r` en `web/public`) | no aparece |
 
-**Lo que parece protegido sin estarlo, dicho por nosotros:**
+**Lo que parece protegido sin estarlo:**
 
-1. La clave de **prueba** está publicada en el repositorio (`web/.env.example`). Producción no la usa por defecto
+1. La clave de **prueba** está publicada en el repositorio (`web/.env.example`), ya se cambio pero se puede ver en el historial de commits. Producción no la usa por defecto
    (sin `CLAVE_ACCESO` la API responde 500), pero si alguien la configurara igual, la compuerta sería pura apariencia.
    **Regla:** la clave de producción es distinta y solo vive en las variables de entorno de Vercel.
 2. No hay bloqueo por intentos fallidos, solo una espera de 0,6 s por intento. Una clave corta se puede adivinar con
@@ -170,7 +169,7 @@ curl -s -o /dev/null -w "%{http_code}\n" "http://localhost:8080/api/datos?f=tema
 
 ---
 
-## 7. Para la presentación en clase (con el sistema abierto)
+## 7. Presentación en clase
 
 - **¿Qué herramienta descartamos y casi elegimos?** Leaflet. Es más simple y liviana, y dibujó los mismos datos en
   156 ms, pero no tiene edificios 3D ni cámara inclinada sin plugins. Mostrar: lente *Densidad* del gemelo.
