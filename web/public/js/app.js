@@ -22,7 +22,7 @@
     $('#estadoDatos').textContent = `lago: ${ok}/${TEMAS.length} temas`;
     const probados = Object.values(LAGO).map(j => j.probado).filter(Boolean).sort();
     if (probados.length) $('#pieProbado').textContent = 'lago probado ' + probados[0] + (probados.at(-1) !== probados[0] ? ' → ' + probados.at(-1) : '');
-    for (const [nombre, mod] of [['secciones', window.SECCIONES], ['diagnostico', window.DIAGNOSTICO], ['atlas', window.ATLAS], ['correlaciones', window.CORRELACIONES], ['mapa', window.MAPA]]) {
+    for (const [nombre, mod] of [['secciones', window.SECCIONES], ['diagnostico', window.DIAGNOSTICO], ['atlas', window.ATLAS], ['correlaciones', window.CORRELACIONES], ['mapa', window.MAPA], ['presentacion', window.PRESENTACION]]) {
       try { mod && mod.init(LAGO); } catch (e) { console.error(nombre, e); }
     }
     navegacion(); buscador(); reloj(); clima();

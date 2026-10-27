@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-  <link rel="stylesheet" href="estilos.css?v=5">
+  <link rel="stylesheet" href="estilos.css?v=6">
 </head>
 <body>
   <!-- Compuerta: la clave se valida en el servidor (/api/entrar) -->
@@ -39,6 +39,7 @@
       <a href="#correlaciones" data-sec="correlaciones">Correlaciones</a>
       <a href="#atlas" data-sec="atlas">Atlas de los 23 distritos</a>
       <a href="#fuentes" data-sec="fuentes">Fuentes y método</a>
+      <a href="#presentacion" data-sec="presentacion">Presentación</a>
       <div class="menu-pie">
         <div id="estadoDatos" class="estado mono">lago: cargando…</div>
         <button id="btnBuscar" class="ghost" type="button">Buscar <kbd>Ctrl K</kbd></button>
@@ -139,6 +140,24 @@
         <div id="fuentesCont"></div>
       </section>
 
+      <section id="presentacion" class="sec">
+        <p class="eyebrow mono">Pitch de 12 minutos · tres turnos de 4 minutos</p>
+        <h1>Presentación</h1>
+        <p class="lead">Las diez diapositivas del pitch. Avanza con las flechas del teclado o los botones; en pantalla completa también funcionan Av Pág y Re Pág, que es lo que envía un puntero de presentación.</p>
+        <div id="presEscena" class="pres-escena">
+          <div id="presLienzo" class="pres-lienzo" aria-live="polite"></div>
+          <div class="pres-controles">
+            <button id="presAnt" class="ghost" type="button" aria-label="Diapositiva anterior">←</button>
+            <span id="presNum" class="mono">1 / 10</span>
+            <button id="presSig" class="ghost" type="button" aria-label="Diapositiva siguiente">→</button>
+            <div id="presPuntos" class="pres-puntos" role="group" aria-label="Ir a una diapositiva"></div>
+            <button id="presReloj" class="ghost mono" type="button" title="Iniciar o pausar el cronómetro de 12 minutos">▶ 00:00</button>
+            <button id="presReiniciar" class="ghost" type="button" aria-label="Reiniciar el cronómetro">↺</button>
+            <button id="presPantalla" class="ghost" type="button">Pantalla completa</button>
+          </div>
+        </div>
+      </section>
+
       <footer class="pie mono">Cerebro Budapest · datos abiertos federados, cada cifra con fuente y fecha · uso privado · <span id="pieProbado"></span></footer>
     </main>
   </div>
@@ -150,12 +169,13 @@
   <div id="tip" class="tip" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-  <script src="js/graficos.js?v=5"></script>
-  <script src="js/secciones.js?v=5"></script>
-  <script src="js/diagnostico.js?v=5"></script>
-  <script src="js/atlas.js?v=5"></script>
-  <script src="js/correlaciones.js?v=5"></script>
-  <script src="js/mapa.js?v=5"></script>
-  <script src="js/app.js?v=5"></script>
+  <script src="js/graficos.js?v=6"></script>
+  <script src="js/secciones.js?v=6"></script>
+  <script src="js/diagnostico.js?v=6"></script>
+  <script src="js/atlas.js?v=6"></script>
+  <script src="js/correlaciones.js?v=6"></script>
+  <script src="js/mapa.js?v=6"></script>
+  <script src="js/presentacion.js?v=6"></script>
+  <script src="js/app.js?v=6"></script>
 </body>
 </html>

@@ -209,6 +209,85 @@ td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
 .buscador-lista button.sel { background: var(--panel-2); color: var(--tinta); }
 .buscador-lista small { color: var(--tinta-3); font-size: 11px; }
 
+/* presentación: lienzo 16:9 que escala con su ancho (cqi); en pantallas angostas cada diapositiva fluye en una columna */
+.pres-escena { container: escena / inline-size; margin-top: 18px; }
+.pres-lienzo { container: lienzo / inline-size; position: relative; overflow: hidden; background: var(--panel); border: 1px solid var(--borde); border-left: 6px solid var(--acento); border-radius: 14px; }
+.dia { display: flex; flex-direction: column; gap: 1em; padding: 1.6em 1.4em 1.1em; font-size: 14px; line-height: 1.45; }
+.dia p { margin: 0; }
+.dia header h2 { font-size: 1.75em; margin: 0; font-weight: 700; letter-spacing: -.015em; }
+.dia-ante { color: var(--acento); font: 600 .72em var(--mono); letter-spacing: .1em; text-transform: uppercase; margin: 0 0 .5em !important; }
+.dia-cuerpo { flex: 1; display: flex; flex-direction: column; gap: .9em; min-height: 0; }
+.dia-pie { display: flex; justify-content: space-between; gap: 1em; flex-wrap: wrap; border-top: 1px solid var(--borde); padding-top: .7em; font: .72em var(--mono); color: var(--tinta-3); }
+.dia-h { display: block; font-size: 1.05em; font-weight: 600; margin: .35em 0 .3em; }
+.dia-xl { font-size: 3em; font-weight: 700; letter-spacing: -.02em; line-height: 1; margin: 0; }
+.dia-cifra { font-size: 1.7em; font-weight: 700; letter-spacing: -.02em; }
+.dia-lema { font-size: 1.45em; }
+.dia-lema span { color: var(--acento); }
+.dia .q { color: var(--tinta-2); font-size: .92em; }
+.dia .acento { color: var(--acento-2); font-weight: 600; }
+.dia .mini { font: 600 .68em var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-3); margin-top: .7em; }
+.dia .caja { border: 1px solid var(--borde-2); border-radius: .6em; padding: .8em 1em; min-width: 0; }
+.dia .caja.marcada { border-color: var(--acento); background: color-mix(in srgb, var(--acento) 8%, transparent); }
+.dia .caja.alerta { border-color: var(--alerta); background: color-mix(in srgb, var(--alerta) 8%, transparent); }
+.dia .caja.banda { background: var(--panel-2); }
+.dia .pill { display: inline-block; border: 1.5px solid currentColor; border-radius: 99px; padding: .05em .8em; margin-bottom: .45em; font: 600 .78em var(--sans); background: color-mix(in srgb, currentColor 12%, transparent); }
+.dia .col2, .dia .col3, .dia .col-ia { display: grid; gap: .9em; grid-template-columns: 1fr; }
+.dia .filas { display: grid; gap: .6em; }
+.dia .fila { display: flex; gap: 1em; align-items: center; }
+.dia .fila .pill { flex: none; min-width: 7.5em; margin: 0; text-align: center; }
+.dia .fila .dia-h { margin: 0 0 .15em; }
+.dia .col-ia .fila { padding: .5em 1em; }
+.dia .etq { flex: none; display: grid; place-items: center; width: 2.6em; height: 2.8em; border: 2px solid var(--acento); border-radius: .4em; background: color-mix(in srgb, var(--acento) 12%, transparent); font-weight: 700; }
+.dia .cifras b { display: block; font-size: 1.8em; font-weight: 700; letter-spacing: -.02em; }
+.dia .cifras small, .dia .flujo small { color: var(--tinta-2); font-size: .85em; }
+.portada .dia-cuerpo { justify-content: center; gap: .6em; }
+.portada .cifras { margin-top: 1.2em; }
+.dia .pila { display: flex; flex-direction: column; gap: .4em; }
+.dia .clic { padding-left: 1em; }
+.dia .ficha-dia { display: grid; grid-template-columns: auto 1fr; gap: .25em 1.2em; margin: 0; }
+.dia .ficha-dia dt { color: var(--tinta-2); }
+.dia .ficha-dia dd { margin: 0; }
+.dia .radar { display: flex; gap: 1.2em; align-items: center; margin-top: .8em; }
+.dia .radar svg { width: 8em; height: 8em; flex: none; }
+.dia .radar .r1 { fill: none; stroke: var(--tinta-3); stroke-dasharray: 4 4; }
+.dia .radar .r2 { fill: color-mix(in srgb, var(--acento) 14%, transparent); stroke: var(--acento); stroke-width: 2; }
+.dia .radar .r3 { fill: var(--acento); }
+.dia .radar ul { margin: 0; padding-left: 1.1em; line-height: 1.6; }
+.dia .flujo { display: flex; flex-direction: column; gap: .4em; }
+.dia .flujo .caja b { display: block; font-size: 1.05em; }
+.dia .flecha { color: var(--tinta-3); text-align: center; line-height: 1; transform: rotate(90deg); }
+.dia .terminal { font: .86em var(--mono); margin: .4em 0 .8em; }
+.dia .terminal td { padding: .45em 0; border-bottom: 1px solid var(--borde-2); overflow-wrap: anywhere; }
+.dia .terminal td:last-child { text-align: right; font-weight: 700; color: var(--ok); white-space: nowrap; padding-left: 1em; }
+.dia .riesgos { margin: .5em 0 0; padding-left: 1.4em; display: grid; gap: .8em; }
+.dia .riesgos li::marker { color: var(--alerta); font-weight: 700; }
+.dia .grande p:first-child { display: flex; align-items: baseline; gap: .3em; }
+.dia .respuestas { display: grid; grid-template-columns: 1fr; margin: 0; }
+.dia .respuestas dt { color: var(--acento); font-weight: 600; padding-top: .7em; }
+.dia .respuestas dd { margin: 0; padding-bottom: .7em; border-bottom: 1px solid var(--borde); }
+.dia .lema { text-align: center; }
+.dia .lema b { display: block; font-size: 1.25em; margin-bottom: .3em; }
+.pres-controles { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.pres-controles button:disabled { opacity: .35; cursor: default; }
+.pres-puntos { display: flex; gap: 5px; margin: 0 auto 0 6px; }
+.pres-puntos button { width: 10px; height: 10px; padding: 0; border-radius: 50%; border: 1px solid var(--borde-2); background: transparent; }
+.pres-puntos button[aria-current=true] { background: var(--acento); border-color: var(--acento); }
+#presReloj.error { color: var(--alerta); border-color: var(--alerta); }
+@container escena (min-width: 760px) {
+  .pres-lienzo { aspect-ratio: 16 / 9; }
+  .dia { position: absolute; inset: 0; font-size: 1.62cqi; padding: 2em 2.4em 1.2em; }
+  .dia .col2 { grid-template-columns: 1fr 1fr; }
+  .dia .col3 { grid-template-columns: repeat(3, 1fr); }
+  .dia .col-ia { grid-template-columns: 15em 1fr; }
+  .dia .flujo { flex-direction: row; align-items: stretch; }
+  .dia .flujo .caja { flex: 1; text-align: center; }
+  .dia .flecha { align-self: center; transform: none; }
+  .dia .respuestas { grid-template-columns: 13em 1fr; }
+  .dia .respuestas dt, .dia .respuestas dd { padding: .8em 0; border-bottom: 1px solid var(--borde); }
+}
+.pres-escena:fullscreen { display: flex; flex-direction: column; align-items: center; justify-content: center; margin: 0; padding: 16px; background: var(--fondo); }
+.pres-escena:fullscreen .pres-lienzo { width: min(100%, calc((100vh - 80px) * 16 / 9)); }
+
 @media (max-width: 960px) {
   .app { grid-template-columns: 1fr; }
   .menu { position: fixed; inset: 0 auto 0 0; width: 260px; transform: translateX(-100%); transition: transform .2s; }
